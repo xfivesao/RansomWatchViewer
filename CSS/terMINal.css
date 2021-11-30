@@ -332,7 +332,7 @@ pre.dos-caret > span.cursor {
         border-color: #fff;
     }
 }
-
+/*http://aleclownes.com/2017/02/01/crt-display.html*/
 
 @keyframes flicker {
   0% {
