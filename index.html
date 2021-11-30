@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta charset="utf-8">
+<link href="./CSS/terMINal.css" rel="stylesheet">
+<meta content="utf-8"  http-equiv="encoding"/>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JDL84 - RansomWatch</title>
+<script src="./JS/jquery-3.6.0.min.js"></script> 
+<script src="./JS/RansomGuard.js"></script> 
+<script src="./JS/DOS.js"></script>
+</head>
+<body>
+	
+	 <div class="crt"></div>
+	
+<div id="popupBox">
+    <div class="box1 centered">
+    <h1 class="title"></h1>
+	<div class="progress"><span class="bar"></span></div>
+    <span class="message"></span>
+    <a class="close" href="javascript:void(0);" onclick="HideOverlay();">CLOSE</a> 
+	</div>
+</div>
+	
+	
+	
+	
+<div class="TopNav">
+  <ul>
+    <li> <a href="javascript:void(0);">File</a>
+      <ul class="Dropdown">
+        <li><a href="javascript:void(0);" onclick="LoadData();">Reload</a></li>
+        <li><a href="javascript:void(0);" onclick="ExitToDos();">Exit</a></li>
+      </ul>
+    </li>
+    <li> <a href="javascript:void(0);">Sources</a>
+      <ul id="SourceURLS" class="Dropdown">
+      </ul>
+    </li>
+    <li> <a href="javascript:void(0);">Help</a>
+      <ul class="Dropdown">
+        <li><a href="javascript:void(0);" onclick="ShowAbout();">About</a></li>
+      </ul>
+    </li>
+  </ul>
+</div>
+<div class="row  crt">
+  <div class="column left">
+    <div class="SideNav">
+      <ul />      
+    </div>
+  </div>
+  <div id="rightcol" class="column right">
+      <table class="terminalTable">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Group</th>
+            <th>Discovered</th>
+          </tr>
+        </thead>
+        <tbody/>        
+      </table>
+  </div>
+</div>
+</body>
+</html>
