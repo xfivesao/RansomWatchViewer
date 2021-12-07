@@ -427,5 +427,5 @@ pre.dos-caret > span.cursor {
 
 
 .crt {
-  z-index: :998;
+  z-index: 998;
 }

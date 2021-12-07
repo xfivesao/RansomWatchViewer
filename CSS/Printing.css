@@ -1,0 +1,23 @@
+﻿@media print {
+    .print-me, .print-me * {
+        visibility: visible;
+    }
+
+    body * {
+        visibility: hidden;
+    }
+
+    .TopNav {
+        display: none !important;
+    }
+
+    .SideNav {
+        display: none !important;
+        
+    }
+
+    .column{
+        padding:0 !important; 
+    }
+
+}

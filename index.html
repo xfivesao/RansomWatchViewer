@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <link href="./CSS/RansomGuard.css" rel="stylesheet">
+    <link href="./CSS/Printing.css" media="print" rel="stylesheet" type="text/css">
     <meta content="utf-8" http-equiv="encoding" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>JDL84 - RansomWatch</title>
@@ -26,7 +27,8 @@
             <li>
                 <a href="javascript:void(0);">File</a>
                 <ul class="Dropdown">
-                    <li><a href="javascript:void(0);" onclick="LoadData();">Reload</a></li>                    
+                    <li><a href="javascript:void(0);" onclick="LoadData();">Reload</a></li>
+                    
                     <li><a href="javascript:void(0);" onclick="ExitToDos();">Exit</a></li>
                 </ul>
             </li>
@@ -51,7 +53,7 @@
             </div>
         </div>
         <div id="rightcol" class="column right">
-            <table class="terminalTable">
+            <table class="terminalTable print-me">
                 <thead>
                     <tr>
                         <th>Title</th>
