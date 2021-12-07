@@ -12,8 +12,6 @@
 </head>
 <body>
 
-    <div class="crt"></div>
-
     <div id="popupBox">
         <div class="box1 centered">
             <h1 class="title"></h1>
@@ -28,7 +26,7 @@
             <li>
                 <a href="javascript:void(0);">File</a>
                 <ul class="Dropdown">
-                    <li><a href="javascript:void(0);" onclick="LoadData();">Reload</a></li>
+                    <li><a href="javascript:void(0);" onclick="LoadData();">Reload</a></li>                    
                     <li><a href="javascript:void(0);" onclick="ExitToDos();">Exit</a></li>
                 </ul>
             </li>
@@ -40,12 +38,13 @@
             <li>
                 <a href="javascript:void(0);">Help</a>
                 <ul class="Dropdown">
+                    <li><a href="javascript:void(0);" onclick="CRTFlicker();">CRT Toggle</a></li>
                     <li><a href="javascript:void(0);" onclick="ShowAbout();">About</a></li>
                 </ul>
             </li>
         </ul>
     </div>
-    <div class="row  crt">
+    <div id="main" class="Page crt">
         <div class="column left">
             <div class="SideNav">
                 <ul />

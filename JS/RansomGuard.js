@@ -17,6 +17,11 @@ function AddListItem($ID, $href) {
 
 }
 
+function CRTFlicker() {
+    var element = document.getElementById("main");
+    element.classList.toggle("crt");    
+}
+
 
 
 function GetRansomPostsData(sURL) {
