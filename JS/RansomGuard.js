@@ -1,6 +1,6 @@
 var RANSOMWATCH_GROUPS = "https://raw.githubusercontent.com/thetanz/ransomwatch/main/groups.json";
 var RANSOMWATCH_POSTS = "https://raw.githubusercontent.com/thetanz/ransomwatch/main/posts.json";
-
+var RANDON_BG_TIMER = 30000;
 
 function SourcesMenu() {
     $('#SourceURLS').empty();
@@ -16,6 +16,8 @@ function AddListItem($ID, $href) {
     $("#header ul").append('<li><a href="/user/messages"><span class="tab">Message Center</span></a></li>');
 
 }
+
+
 
 function GetRansomPostsData(sURL) {
     var DosTable = $('table.terminalTable > tbody');
@@ -171,7 +173,12 @@ function LoadData() {
     GetRansomPostsData(RANSOMWATCH_POSTS);
 }
 
+function BGTimer() {
+    LoadData()
+    setTimeout("BGTimer()", RANDON_BG_TIMER);
+}
+
 $(document).ready(function () {
     SourcesMenu();
-    LoadData();
+    BGTimer()
 });

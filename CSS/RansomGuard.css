@@ -101,8 +101,6 @@ a:hover, a:focus {
 .TopNav ul li ul li {
     clear: both;
     width: 100%;
-    left: -2em;
-    right: -2em;
     overflow: hidden;
 }
 .SideNav {
@@ -293,7 +291,7 @@ table.terminalTable tbody tr:hover {
 }
 .dos {
     width: 100%;
-    left: 0;
+
 }
 .dos-l {
     float: left;
@@ -321,7 +319,6 @@ span.dos-cmdline:focus {
 }
 pre.dos-caret > span.cursor {
     animation: dos-caret-blink 1s step-end infinite;
-    width: 10px;
     border-bottom: 2px solid white;
 }
 @keyframes dos-caret-blink {
