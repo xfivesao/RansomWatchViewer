@@ -5,6 +5,11 @@
     src: url('fonts/Fixedsys500c.eot');
     src: local('â˜º'), url('fonts/Fixedsys500c.woff') format('woff'), url('fonts/Fixedsys500c.ttf') format('truetype'), url('fonts/Fixedsys500c.svg') format('svg');
 }
+@page {
+    size: auto;
+    margin-bottom: 5mm;
+}
+
 body {
     margin: 0;
     font-family: DOS, Monaco, Menlo, Consolas, "Courier New", monospace;
