@@ -47,10 +47,9 @@ body {
 }*/
 .right {
     /*    width: 80%;*/
-    margin-left: 10%;
-    margin-right: 10%;
+    margin-left: 5%;
+    margin-right:5%;
     min-width: 300px;
-    overflow: hidden;
 }
 .row:after {
     content: "";
