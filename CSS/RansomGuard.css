@@ -10,6 +10,14 @@
     margin-bottom: 5mm;
 }
 
+@media only screen and (max-width: 608px) {
+
+    .SideNav 
+    {
+        display: none;
+    }
+}
+
 body {
     margin: 0;
     font-family: DOS, Monaco, Menlo, Consolas, "Courier New", monospace;
@@ -28,18 +36,21 @@ body {
                                   supported by Chrome, Edge, Opera and Firefox */
 								  
 }
-.Page {
-    margin-right: 10px;
-}
+
 .column {
     float: left;
     padding-top: 25px;
 }
-.left {
+/*.left {
     width: 20%;
-}
+    min-width:150px;
+}*/
 .right {
-    width: 80%;
+    /*    width: 80%;*/
+    margin-left: 10%;
+    margin-right: 10%;
+    min-width: 300px;
+    overflow: hidden;
 }
 .row:after {
     content: "";
@@ -68,6 +79,10 @@ a:hover, a:focus {
     color: #fefe54;
     background: #aa5500;
 }
+.TopNav {
+    position: fixed;
+    width:100%;
+}
 .TopNav ul {
     list-style-type: none;
     margin: 0;
@@ -91,6 +106,16 @@ a:hover, a:focus {
     color: #BBBBBB;
     cursor: pointer;
 }
+
+    .TopNav ul li ul {
+        max-height: 200px;
+    }
+
+    .TopNav ul li ul {
+        overflow: hidden;
+        overflow-y: auto;
+    }
+
 .TopNav ul li ul {
     visibility: hidden;
     opacity: 0;
@@ -108,6 +133,12 @@ a:hover, a:focus {
     width: 100%;
     overflow: hidden;
 }
+
+.TopNav li > .inactive, .TopNav li > .inactive > a, .TopNav li > .inactive > a:hover, .TopNav li > .inactive > a:focus {
+    color: #666666;
+    font-style: italic;
+}
+
 .SideNav {
     display: none;
     padding: 10px 15px;

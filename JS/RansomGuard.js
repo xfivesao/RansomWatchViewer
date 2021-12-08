@@ -92,7 +92,7 @@ function AjaxError(jqXHR, exception) {
 function GetRansomGroupsData(sURL) {
 
 
-    var SideNav = $('div.SideNav > ul');
+    /*var SideNav = $('div.SideNav > ul');*/
 
     $.ajax({
         url: sURL,
@@ -104,7 +104,8 @@ function GetRansomGroupsData(sURL) {
 
         },
         success: function (data) {
-            SideNav.empty();
+    /*        SideNav.empty();*/
+            $('#GroupURLs').empty();
             $('div.SideNav').show();
             data = data.sort((a, b) => {
                 let retval = 0;
@@ -128,7 +129,10 @@ function GetRansomGroupsData(sURL) {
                         slugtitle += " (inactive)"
                     }
 
-                    SideNav.append("<li><a target=\"_blank\" class=\"" + cl + "\" href=\"" + vals.slug + "\" title=\"" + slugtitle + "\">" + val.name + "</a></li>");
+           
+                    $('#GroupURLs').append("<li><a target=\"_blank\" class=\"" + cl + "\" href=\"" + vals.slug + "\" title=\"" + slugtitle + "\">" + val.name + "</a></li>");
+
+                  /*  SideNav.append("<li><a target=\"_blank\" class=\"" + cl + "\" href=\"" + vals.slug + "\" title=\"" + slugtitle + "\">" + val.name + "</a></li>");*/
 
 
                 });
