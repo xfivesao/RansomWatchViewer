@@ -255,10 +255,11 @@ a:hover, a:focus {
     background: #00aaaa;
 }
 table.terminalTable {
-	display: none;
+
     width: 100%;
     text-align: left;
     border-collapse: collapse;
+    overflow: hidden;
 }
 table.terminalTable td, table.terminalTable th {
     padding: 3px 4px;
