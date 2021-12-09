@@ -12,10 +12,8 @@
 
 @media only screen and (max-width: 608px) {
 
-    .SideNav 
-    {
-        display: none;
-    }
+
+
 }
 
 body {
@@ -113,7 +111,6 @@ a:hover, a:focus {
     .TopNav ul li ul {
         overflow: hidden;
         overflow-y: auto;
-        z-index:999;
     }
 
 .TopNav ul li ul {
