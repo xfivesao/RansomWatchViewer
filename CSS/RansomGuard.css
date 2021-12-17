@@ -36,7 +36,7 @@ body {
 }
 
 .column {
-    float: left;
+
     padding-top: 25px;
 }
 /*.left {
@@ -44,9 +44,8 @@ body {
     min-width:150px;
 }*/
 .right {
-    /*    width: 80%;*/
-    margin-left: 5%;
-    margin-right:5%;
+    margin-left: 5px;
+    margin-right:5px;
     min-width: 300px;
 }
 .row:after {
@@ -305,6 +304,31 @@ table.terminalTable thead th {
     color: #333333;
     text-align: left;
 }
+
+table.terminalTable td{
+
+ overflow: hidden;
+ text-overflow: ellipsis;
+ white-space: nowrap;
+}
+
+table.terminalTable td.post_tile{
+	
+ max-width: 500px;
+}
+
+table.terminalTable td.post_group{
+	
+ max-width: 150px;
+
+}
+
+table.terminalTable td.post_date{
+	
+ max-width: 150px;
+
+}
+
 table.terminalTable tfoot td {
     font-size: 14px;
 }

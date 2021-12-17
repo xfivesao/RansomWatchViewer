@@ -55,7 +55,7 @@ function GetRansomPostsData(sURL) {
 
             $.each(data, function (key, val) {
 
-                DosTable.append("<tr><td>" + val.post_title + "</td><td>" + val.group_name + "</td><td>" + val.discovered.split(' ')[0] + "</td></tr>");
+                DosTable.append("<tr><td class=\"post_tile\">" + val.post_title + "</td><td class=\"post_group\">" + val.group_name + "</td><td class=\"post_date\">" + val.discovered.split(' ')[0] + "</td></tr>");
 
             });
             HideOverlay();
