@@ -1,5 +1,5 @@
 var audioCtx;
-var BadCommandLimit=10;
+var BadCommandLimit = 10;
 
 function wait(ms) {
     var start = new Date().getTime();
@@ -10,33 +10,30 @@ function wait(ms) {
 }
 
 function beep(Freq, Duration) {
-	
-	try {
-	
-	if (audioCtx == null) 
-	{
-        audioCtx = new(window.AudioContext || window.webkitAudioContext)();
+
+    try {
+
+        if (audioCtx == null) {
+            audioCtx = new(window.AudioContext || window.webkitAudioContext)();
+        }
+
+        var oscillator = audioCtx.createOscillator();
+        var gainNode = audioCtx.createGain();
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        gainNode.gain.value = 0.5;
+        oscillator.frequency.value = Freq;
+        oscillator.type = "square";
+
+        oscillator.start();
+        //wait(Duration);
+        oscillator.stop();
+
+    } catch (err) {
+        conole.log(err.message);
     }
-	
-    var oscillator = audioCtx.createOscillator();
-    var gainNode = audioCtx.createGain();
-
-    oscillator.connect(gainNode);
-    gainNode.connect(audioCtx.destination);
-
-    gainNode.gain.value = 0.5;
-    oscillator.frequency.value = Freq;
-    oscillator.type = "square";
-
-    oscillator.start();
-    //wait(Duration);
-    oscillator.stop();
-	
-	}
-	
-	catch(err) {
-		conole.log(err.message);		
-	}
 
 }
 
@@ -73,10 +70,10 @@ function ExitToDos() {
     document.body.style.backgroundColor = "black";
     document.body.style.Color = "white";
     document.body.setAttribute("onclick", "GetLastCMD()");
-	
-	var elemCRT = document.createElement('div');
-	elemCRT.classList.add('crt');
-	
+
+    var elemCRT = document.createElement('div');
+    elemCRT.classList.add('crt');
+
     var elemDiv = document.createElement('div');
     elemDiv.setAttribute("id", "MSDOS");
     elemDiv.innerHTML = "Starting MS-DOS...</br></br>HIMEM is testing extended memory...done. </br></br>";
@@ -86,8 +83,7 @@ function ExitToDos() {
 }
 var BadCommandCount = 0;
 
-function BadCommand() 
-{
+function BadCommand() {
 
     BadCommandCount++;
 
@@ -95,7 +91,7 @@ function BadCommand()
         beep(1888, 250);
     } else {
         BadCommandCount = 0;
-          TheyArePersistent();
+        TheyArePersistent();
     }
     WriteToDos("Bad command or filename");
 
@@ -190,7 +186,7 @@ function ShowVader() {
     VADER += "/_        \\o========o/        _\\ \r\n";
     VADER += "  '--...__|'-._  _.-'|__...--'     \r\n";
     VADER += "          |    ''    |             \r\n";
-	VADER += "\r\n"
+    VADER += "\r\n"
     return VADER;
 }
 
@@ -227,7 +223,3 @@ function UserInput(i) {
         GetLastCMD();
     }
 }
-
-
-
-

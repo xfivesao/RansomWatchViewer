@@ -19,13 +19,12 @@ function AddListItem($ID, $href) {
 
 function CRTFlicker() {
     var element = document.getElementById("main");
-    element.classList.toggle("crt");    
+    element.classList.toggle("crt");
 }
 
 
-
 function GetRansomPostsData(sURL) {
-    var DosTable = $('table.terminalTable > tbody');
+    var DosTable = $('#ticker');
 
     $.ajax({
         url: sURL,
@@ -39,7 +38,7 @@ function GetRansomPostsData(sURL) {
         },
         success: function (data) {
             DosTable.empty();
-            $('table.terminalTable').show();
+            $('#ticker').show();
             data = data.sort((a, b) => {
 
                 let retval = 0;
@@ -55,7 +54,7 @@ function GetRansomPostsData(sURL) {
 
             $.each(data, function (key, val) {
 
-                DosTable.append("<tr><td class=\"post_tile\">" + val.post_title + "</td><td class=\"post_group\">" + val.group_name + "</td><td class=\"post_date\">" + val.discovered.split(' ')[0] + "</td></tr>");
+                DosTable.append("<div class=\"article\"><span class=\"title\">" + val.post_title + "</span><div class=\"sub\"><span class=\"group\">" + val.group_name + "</span><span class=\"date\">" + val.discovered.split(' ')[0] + "</span></div>");
 
             });
             HideOverlay();
@@ -104,9 +103,9 @@ function GetRansomGroupsData(sURL) {
 
         },
         success: function (data) {
-    /*        SideNav.empty();*/
+            /*        SideNav.empty();*/
             $('#GroupURLs').empty();
-            $('div.SideNav').show();
+
             data = data.sort((a, b) => {
                 let retval = 0;
                 if (retval === 0)
@@ -129,12 +128,10 @@ function GetRansomGroupsData(sURL) {
                         slugtitle += " (inactive)"
                     }
 
-           
+
                     $('#GroupURLs').append("<li><a target=\"_blank\" class=\"" + cl + "\" href=\"" + vals.slug + "\" title=\"" + slugtitle + "\">" + val.name + "</a></li>");
 
-                  /*  SideNav.append("<li><a target=\"_blank\" class=\"" + cl + "\" href=\"" + vals.slug + "\" title=\"" + slugtitle + "\">" + val.name + "</a></li>");*/
-
-
+                    $('#sideList').append("<li><a target=\"_blank\" class=\"" + cl + "\" href=\"" + vals.slug + "\" title=\"" + slugtitle + "\">" + val.name + "</a></li>");
                 });
 
             });
@@ -150,21 +147,21 @@ function GetRansomGroupsData(sURL) {
 }
 
 function ShowOverlay(title, message, loading, error) {
-    $('#popupBox').show();
-    $('#popupBox .message').text(message);
-    $('#popupBox .title').text(title);
+    $('#overlay').show();
+    $('#overlay .message').text(message);
+    $('#overlay .title').text(title);
 
     if (!loading) {
-        $('#popupBox .close').show();
-        $('#popupBox .progress').hide();
+        $('#overlay .close').show();
+        $('#overlay .progress').hide();
     } else {
-        $('#popupBox .close').hide();
-        $('#popupBox .progress').show();
+        $('#overlay .close').hide();
+        $('#overlay .progress').show();
     }
     if (error) {
-        $('#popupBox .box1').addClass("error");
+        $('#overlay .popupBox').addClass("error");
     } else {
-        $('#popupBox .box1').removeClass("error");
+        $('#overlayx .popupBox').removeClass("error");
     }
 }
 
@@ -173,9 +170,9 @@ function ShowAbout() {
 }
 
 function HideOverlay() {
-    $('#popupBox .message').empty();
-    $('#popupBox .title').empty();
-    $('#popupBox').hide();
+    $('#overlay .message').empty();
+    $('#overlay .title').empty();
+    $('#overlay').hide();
 }
 
 function LoadData() {

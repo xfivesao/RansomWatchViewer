@@ -1,0 +1,304 @@
+@font-face {
+    font-family: 'DOS';
+    font-style: normal;
+    font-weight: normal;
+    src: url('../fonts/Fixedsys500c.eot');
+    src: local('â˜º'), url('../fonts/Fixedsys500c.woff') format('woff'), url('../fonts/Fixedsys500c.ttf') format('truetype'), url('../fonts/Fixedsys500c.svg') format('svg');
+}
+@page {
+    size: auto;
+    margin-bottom: 5mm;
+}
+body {
+    margin: 0;
+    font-family: DOS, Monaco, Menlo, Consolas, "Courier New", monospace;
+    font-size: 18px;
+    line-height: 20px;
+    color: #bbbbbb;
+    background-color: #000084;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+a {
+    color: #fefe54;
+    text-decoration: none;
+}
+a:hover, a:focus {
+    color: #fefe54;
+    background: #aa5500;
+}
+.TopNav {
+    position: fixed;
+    width: 100%;
+    z-index: 999;
+}
+.TopNav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #BBBBBB;
+}
+.TopNav li {
+    float: left;
+}
+.TopNav li a {
+    display: block;
+    color: #000084;
+    text-align: left;
+    padding: 0 10px;
+    font-size: 18px;
+    text-decoration: none;
+}
+.TopNav li a:hover {
+    background-color: #111111;
+    color: #BBBBBB;
+    cursor: pointer;
+}
+.TopNav ul li ul {
+    max-height: 350px;
+}
+.TopNav ul li ul {
+    overflow: hidden;
+    overflow-y: auto;
+}
+.TopNav ul li ul {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    transition: all 0.5s ease;
+    width: auto;
+}
+.TopNav ul li:hover > ul, .TopNav ul li ul:hover {
+    visibility: visible;
+    opacity: 1;
+    display: block;
+}
+.TopNav ul li ul li {
+    clear: both;
+    width: 100%;
+    overflow: hidden;
+}
+.TopNav li > .inactive, .TopNav li > .inactive > a, .TopNav li > .inactive > a:hover, .TopNav li > .inactive > a:focus {
+    color: #666666;
+    font-style: italic;
+}
+.centeredDiv {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.Posts {
+    position: fixed;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: scroll;
+    overflow-x: hidden;
+    max-height: calc(100% - 120px);
+    max-height: -moz-calc(100% - 120px);
+    max-height: -webkit-calc(100% - 120px);
+    left: 300px;
+    right: 15px;
+    top: 60px;
+}
+.article {
+    width: 100%;
+    margin-bottom: 15px;
+}
+.article .sub {
+    width: 100%;
+}
+.article .title {
+    font-size: 14pt;
+    width: 100%;
+    color: #FFF;
+}
+.sub .group {
+    font-size: 10pt;
+    margin-right: 25px;
+}
+.sub .date {
+    font-size: 10pt;
+    right: 10px;
+}
+.article:hover {
+    background-color: #00aaaa;
+    color: #ffffff;
+    display: block;
+}
+.SideNav {
+    top: 50px;
+    padding: 10px 15px;
+    left: 15px;
+    border: 2px solid #000000;
+    -webkit-box-shadow: 0 0 0 5px, 11px 13px 0 4px black;
+    -moz-box-shadow: 0 0 0 5px, 11px 13px 0 4px black;
+    box-shadow: 0 0 0 5px, 11px 13px 0 4px black;
+    background-color: #BBBBBB;
+    min-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    overflow: scroll;
+    overflow-x: hidden;
+    max-height: calc(100% - 130px);
+    max-height: -moz-calc(100% - 130px);
+    max-height: -webkit-calc(100% - 130px);
+    /* margin-bottom: 100px; */
+    position: fixed;
+}
+.SideNav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #BBBBBB;
+}
+.SideNav li a {
+    /* display: block; */
+    color: #000084;
+    text-align: left;
+    /* padding: 0 10px; */
+    font-size: 18px;
+    text-decoration: none;
+}
+.SideNav li a:hover {
+    background-color: #111111;
+    color: #BBBBBB;
+}
+.SideNav li > .active, .SideNav li > .active > a, .SideNav li > .active > a:hover, .SideNav li > .active > a:focus {
+    color: #ffffff;
+    background-color: #00aaaa;
+}
+.SideNav li > .inactive, .SideNav li > .inactive > a, .SideNav li > .inactive > a:hover, .SideNav li > .inactive > a:focus {
+    color: #666666;
+    font-style: italic;
+}
+#overlay {
+    width: 100%;
+    height: 100%;
+    z-index: 980;
+    position: absolute;
+    position: fixed;
+    display: none;
+}
+.popupBox {
+    padding: 16px 20.8px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    line-height: 20px;
+    color: #ffffff;
+    background-color: #00aaaa;
+    border: 4px double #ffffff;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    -webkit-box-shadow: 0 0 0 0px, 11px 13px 0 4px black;
+    -moz-box-shadow: 0 0 0 0px, 11px 13px 0 4px black;
+    box-shadow: 0 0 0 0px, 11px 13px 0 4px black;
+    min-width: 200px;
+    min-height: 50px;
+    z-index: 990;
+}
+.popupBox h1 {
+    font-size: 18px;
+    line-height: 1;
+    color: #ffffff;
+    text-align: left;
+    text-decoration: blink;
+    display: block;
+    font-size: 2em;
+    margin: 0px;
+}
+.popupBox a {
+    display: block;
+    overflow: hidden;
+    width: inherit;
+    text-align: center;
+    margin-top: 10px;
+    bottom: 5px;
+}
+.Footer {
+    position: fixed;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    bottom: 0;
+    height: 15px;
+    overflow: hidden;
+    background-color: #BBBBBB;
+}
+.error {
+    background: #A5000C;
+}
+.progress {
+    width: 300px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    background: #BBBBBB;
+    display: none;
+}
+.progress .bar {
+    height: 15px;
+    position: relative;
+    z-index: 2;
+    background: yellow;
+    overflow: hidden;
+    animation: progressBar 1.5s ease-in-out;
+    animation-iteration-count: infinite;
+    animation-fill-mode: both;
+    content: "";
+    display: block;
+}
+@keyframes progressBar {
+    0% {
+        left: 0;
+        width: 0;
+    }
+    50% {
+        left: 0;
+        width: 100%;
+    }
+    100% {
+        left: 100%;
+        width: 0;
+    }
+}
+@media screen and (max-width:769px) {
+    .TopNav li a {
+        padding: 0 15px;
+        font-size: 20px;
+    }
+    .TopNav ul li ul {
+        max-height: 250px;
+    }
+    .SideNav {
+        display: none;
+    }
+    .Posts {
+        left: 15px;
+        top: 45px;
+    }
+}
+@media screen and (max-width:480px) {
+    .TopNav li a {
+        padding: 0 15px;
+        font-size: 20px;
+    }
+    .TopNav ul li ul {
+        max-height: 150px;
+    }
+    .SideNav {
+        display: none;
+    }
+    .Posts {
+        left: 15px;
+        top: 45px;
+    }
+}

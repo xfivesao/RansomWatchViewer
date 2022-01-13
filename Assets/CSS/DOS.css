@@ -1,0 +1,45 @@
+/*MS-DOS Parts*/
+#MSDOS {
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+    padding-top: 25px;
+    padding-left: 25px;
+}
+.dos {
+    width: 100%;
+}
+.dos-l {
+    float: left;
+}
+.dos-r {
+    border: none;
+    background: black;
+    font-family: DOS, Monaco, Menlo, Consolas, "Courier New", monospace;
+    font-size: 18px;
+    color: #bbbbbb;
+    caret-shape: underscore;
+}
+.dos-r pre {
+    margin: 0;
+    font-family: DOS, Monaco, Menlo, Consolas, "Courier New", monospace;
+    display: inline-block;
+}
+span.dos-cmdline {}
+span.dos-cmdline:focus {
+    outline: none;
+    caret-color: transparent;
+}
+pre.dos-caret > span.cursor {
+    animation: dos-caret-blink 1s step-end infinite;
+    border-bottom: 2px solid white;
+}
+@keyframes dos-caret-blink {
+    from, to {
+        border-color: transparent;
+    }
+    50% {
+        border-color: #fff;
+    }
+}
