@@ -106,10 +106,12 @@ a:hover, a:focus {
     left: 300px;
     right: 15px;
     top: 60px;
+
 }
 .article {
     width: 100%;
     margin-bottom: 15px;
+
 }
 .article .sub {
     width: 100%;
@@ -127,7 +129,10 @@ a:hover, a:focus {
     font-size: 10pt;
     right: 10px;
 }
-.article:hover {
+.article:hover  {
+	 overflow-x:auto;
+	 white-space:pre-wrap;
+	
     background-color: #00aaaa;
     color: #ffffff;
     display: block;
