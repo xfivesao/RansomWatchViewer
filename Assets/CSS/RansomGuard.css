@@ -338,3 +338,53 @@ a:hover, a:focus {
         top: 10px;
     }
 }
+@media screen and (min-width: 900px) {
+    article {
+        padding: 1rem 3rem;
+    }
+}
+@media print {
+    .TopNav {
+        display: none;
+    }
+    .SideNav {
+        display: none;
+    }
+    .Posts {
+        /* white-space: nowrap; */
+        text-overflow: ellipsis;
+        overflow: visible;
+        position: relative;
+    }
+    #overlay {
+        display: none;
+    }
+    #ticker {
+        left: 0;
+    }
+    #ticker h1 {
+        font-size: small
+    }
+    body {
+        font-size: small;
+    }
+    .popupBox {
+        display: none;
+    }
+    .article {
+        margin-bottom: 5px;
+    }
+    .article .title {
+        font-size: small;
+        width: 100%;
+        color: #FFF;
+    }
+    .sub .group {
+        font-size: small;
+        margin-right: 5px;
+    }
+    .sub .date {
+        font-size: small;
+        right: 10px;
+    }
+}
