@@ -104,15 +104,13 @@ a:hover, a:focus {
     max-height: -moz-calc(100% - 35px);
     max-height: -webkit-calc(100% - 35px);
     left: 300px;
-    right:0;
-	padding-right: 20px;
+    right: 0;
+    padding-right: 20px;
 }
 .article {
     width: 100%;
     margin-bottom: 15px;
 }
-
-
 .article .sub {
     width: 100%;
 }
@@ -129,10 +127,9 @@ a:hover, a:focus {
     font-size: 10pt;
     right: 10px;
 }
-.article:hover  {
-	 overflow-x:auto;
-	 white-space:pre-wrap;
-	
+.article:hover {
+    overflow-x: auto;
+    white-space: pre-wrap;
     background-color: #00aaaa;
     color: #ffffff;
     display: block;
@@ -185,26 +182,18 @@ a:hover, a:focus {
     color: #666666;
     font-style: italic;
 }
-
-
 #ticker h1 {
     width: 100%;
     padding-bottom: 20px;
-	
-	border-bottom:#bbbbbb solid 2px;
-
+    border-bottom: #bbbbbb solid 2px;
 }
-
-#ticker h1 .count{
-	font-size:medium;
-	padding-left:10px;
+#ticker h1 .count {
+    font-size: medium;
+    padding-left: 10px;
 }
-
-#ticker
-{
-	top:20px;
+#ticker {
+    top: 20px;
 }
-
 #overlay {
     width: 100%;
     height: 100%;
@@ -213,18 +202,14 @@ a:hover, a:focus {
     position: fixed;
     display: none;
 }
-
-.popupBox ul
-{
-	list-style-type: none;
-	padding: 0 0 0 0 ;
+.popupBox ul {
+    list-style-type: none;
+    padding: 0 0 0 0;
 }
-
-.popupBox .inactive{
-	    color: #666666;
+.popupBox .inactive {
+    color: #666666;
     font-style: italic;
 }
-
 .popupBox {
     padding: 16px 20.8px;
     margin-bottom: 20px;
@@ -260,6 +245,14 @@ a:hover, a:focus {
     text-align: center;
     margin-top: 10px;
     bottom: 5px;
+}
+.popupBox .close {
+    background-color: #BBBBBB;
+    color: #000000;
+}
+.popupBox .close:hover, .close:focus {
+    color: #fefe54;
+    background: #aa5500;
 }
 .Footer {
     position: fixed;
@@ -322,11 +315,9 @@ a:hover, a:focus {
         left: 15px;
         top: 45px;
     }
-	
-	#ticker
-{
-	top:10px;
-}
+    #ticker {
+        top: 10px;
+    }
 }
 @media screen and (max-width:480px) {
     .TopNav li a {
@@ -343,8 +334,7 @@ a:hover, a:focus {
         left: 15px;
         top: 45px;
     }
-		#ticker
-{
-	top:10px;
-}
+    #ticker {
+        top: 10px;
+    }
 }

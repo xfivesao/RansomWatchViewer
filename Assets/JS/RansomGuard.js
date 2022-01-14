@@ -160,11 +160,11 @@ function GetRansomPostsData(sURL) {
                 }
 
 
-                var olderItems = data.filter(function (item) {
+                var HistoricalItems = data.filter(function (item) {
                     return DaysSince(Date.parse(item.discovered)) >= (day + 7 + thisMonthDays);
                 });
 
-                DosTable.append(GetDateFilteredPost('Older', olderItems));
+                DosTable.append(GetDateFilteredPost('Historical', HistoricalItems));
             }
 
             HideOverlay();
@@ -199,6 +199,7 @@ function FilteredLoop(data, Today) {
     });
 }
 
+
 function ShowGroupLinks(grp) {
 
     if (links != null) {
@@ -225,8 +226,6 @@ function ShowGroupLinks(grp) {
                 if (vals.slug.includes('.onion')) {
                     slug_type = 'ToR'
                 }
-
-
                 $Links.append("<li><a target=\"_blank\" class=\"" + cl + "\" href=\"" + vals.slug + "\" title=\"" + slugtitle + "\">" + grp_links[0].name + " (" + slug_type + ")" + "</a></li>");
 
 
