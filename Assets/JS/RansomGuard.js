@@ -27,7 +27,7 @@ function DaysSince(post_date)
 	var date1 = new Date(post_date);
 	var date2 = new Date();
 
-	var Difference_In_Time = date2.getTime() - date1.getTime();
+	var Difference_In_Time = date2.setHours(0,0,0,0) - date1.setHours(0,0,0,0);
   
 	return  Difference_In_Time / (1000 * 3600 * 24);
 
@@ -52,9 +52,9 @@ function GetRansomPostsData(sURL) {
             data = data.sort((a, b) => {
 
                 let retval = 0;
-                if (a.discovered > b.discovered)
+                if (Date.parse(a.discovered) > Date.parse(b.discovered))
                     retval = -1;
-                if (a.discovered < b.discovered)
+                if (Date.parse(a.discovered) < Date.parse(b.discovered))
                     retval = 1;
                 if (retval === 0)
                     retval = a.group_name < b.group_name ? -1 : 1;
@@ -86,7 +86,7 @@ function GetRansomPostsData(sURL) {
 				 {
 					Today.append(article)
 				 }
-				 else if (age >= 1 && age <= 2)
+				 else if (age >= 1 && age < 2)
 				 {
 					 Yesterday.append(article)
 				 }
