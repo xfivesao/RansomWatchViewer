@@ -1,5 +1,7 @@
-var RANSOMWATCH_GROUPS = "https://raw.githubusercontent.com/thetanz/ransomwatch/main/groups.json";
-var RANSOMWATCH_POSTS = "https://raw.githubusercontent.com/thetanz/ransomwatch/main/posts.json";
+//var RANSOMWATCH_GROUPS = "https://raw.githubusercontent.com/thetanz/ransomwatch/main/groups.json";
+//var RANSOMWATCH_POSTS = "https://raw.githubusercontent.com/thetanz/ransomwatch/main/posts.json";
+var RANSOMWATCH_GROUPS = "https://raw.githubusercontent.com/JMousqueton/ransomwatch/main/groups.json"
+var RANSOMWATCH_POSTS = "https://raw.githubusercontent.com/JMousqueton/ransomwatch/main/posts.json"
 var RANDON_BG_TIMER = 30000;
 
 var ORDERBYGROUP = false;
