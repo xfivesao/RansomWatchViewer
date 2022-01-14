@@ -2,6 +2,24 @@ var RANSOMWATCH_GROUPS = "https://raw.githubusercontent.com/thetanz/ransomwatch/
 var RANSOMWATCH_POSTS = "https://raw.githubusercontent.com/thetanz/ransomwatch/main/posts.json";
 var RANDON_BG_TIMER = 30000;
 
+var ORDERBYGROUP = false;
+
+
+function LisPostsBy()
+{
+	if(ORDERBYGROUP)
+	{
+		ORDERBYGROUP = false;
+		$("#sortby").text("by Group")
+	}		
+	else
+	{
+		ORDERBYGROUP = true;
+		$("#sortby").text("by Date")
+	}
+	LoadData();
+}
+
 function SourcesMenu() {
     $('#SourceURLS').empty();
 
@@ -49,6 +67,8 @@ function GetRansomPostsData(sURL) {
         success: function (data) {
             DosTable.empty();
             $('#ticker').show();
+			
+			//Sort records by date 
             data = data.sort((a, b) => {
 
                 let retval = 0;
@@ -62,43 +82,75 @@ function GetRansomPostsData(sURL) {
 
             });
 
-			var Today = $("<div></div>").append("<h1>Today</h1>");
-			var Yesterday = $("<div></div>").append("<h1>Yesterday</h1>");
-			var Older = $("<div></div>").append("<h1>Older</h1>");
-			
-            $.each(data, function (key, val) 
-			{	         
-				 var date_discovered = Date.parse(val.discovered);				 
-				 
-				 var article = $("<div class=\"article\"></div>");
-				 var title = $("<span class=\"title\"></span>").append(val.post_title);
-				 var sub = $("<div class=\"sub\"></div>")
-				 var group = $("<span class=\"group\"></span>").append(val.group_name);
-				 var date = $("<span class=\"date\"></span>").append(GetDate(date_discovered));
-				 article.append(title);
-				 sub.append(group);
-				 sub.append(date);
-				 article.append(sub);
-				 
-				 var age = DaysSince(date_discovered);
-				 
-				 if(age < 1)
-				 {
-					Today.append(article)
-				 }
-				 else if (age >= 1 && age < 2)
-				 {
-					 Yesterday.append(article)
-				 }
-				 else
-				 {
-					 Older.append(article)
-				 }
 
-            });
-			DosTable.append(Today);
-			DosTable.append(Yesterday);
-			DosTable.append( Older);
+
+			if(ORDERBYGROUP)
+			{
+				const filterResults=(results)=>{
+				const flags=[],output=[];
+				results.forEach((result)=>{
+					if(flags.indexOf(result.group_name)<0){
+					output.push(result)
+					flags.push(result.group_name)
+					}
+					})
+					return output;
+				}
+			
+				data = data.sort((a, b) => {
+				 let retval = 0;
+				 retval = a.group_name < b.group_name ? -1 : 1;
+				 return retval;
+				});
+			
+				$.each(filterResults(data), function (groupkey, val) 
+				{
+					var GroupList = $("<div></div>").append("<h1>"+ val.group_name +"</h1>");
+					
+						$.each(data, function (postkey, post) 
+						{
+							if(post.group_name == val.group_name)
+							{
+								GroupList.append(CreateArticle(post.post_title,post.group_name,post.discovered));
+							}
+						});	
+					DosTable.append(GroupList);						
+				});
+				
+				
+			}
+			else
+			{
+				var Today = $("<div></div>").append("<h1>Today</h1>");
+				var Yesterday = $("<div></div>").append("<h1>Yesterday</h1>");
+				var Older = $("<div></div>").append("<h1>Older</h1>");
+			
+				$.each(data, function (key, val) 
+				{	         
+					var date_discovered = Date.parse(val.discovered);			 
+					var article = CreateArticle(val.post_title,val.group_name,val.discovered);
+				 
+					var age = DaysSince(date_discovered);
+				 
+					if(age < 1)
+					{
+						Today.append(article)
+					}
+					else if (age >= 1 && age < 2)
+					{
+						Yesterday.append(article)
+					}
+					else
+					{
+						Older.append(article)
+					}				 
+
+				});
+				DosTable.append(Today);
+				DosTable.append(Yesterday);
+				DosTable.append( Older);
+			}
+			
             HideOverlay();
 
         },
@@ -108,6 +160,20 @@ function GetRansomPostsData(sURL) {
         }
     });
 
+}
+
+function CreateArticle(title,group,date)
+{
+	var article = $("<div class=\"article\"></div>");
+	var title = $("<span class=\"title\"></span>").append(title);
+	var sub = $("<div class=\"sub\"></div>")
+	var group = $("<span class=\"group\"></span>").append(group);
+	var date = $("<span class=\"date\"></span>").append(GetDate(date));
+	article.append(title);
+	sub.append(group);
+	sub.append(date);
+	article.append(sub);
+	return article
 }
 
 function AjaxError(jqXHR, exception) {
