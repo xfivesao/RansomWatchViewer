@@ -29,11 +29,6 @@ function SourcesMenu() {
 
 }
 
-function AddListItem($ID, $href) {
-
-    $("#header ul").append('<li><a href="/user/messages"><span class="tab">Message Center</span></a></li>');
-
-}
 
 function CRTFlicker() {
     var element = document.getElementById("main");
@@ -231,7 +226,7 @@ function GetDate(d)
 function GetRansomGroupsData(sURL) {
 
 
-    /*var SideNav = $('div.SideNav > ul');*/
+    
 
     $.ajax({
         url: sURL,
@@ -243,7 +238,7 @@ function GetRansomGroupsData(sURL) {
 
         },
         success: function (data) {
-            /*        SideNav.empty();*/
+            $('#sideList').empty();
             $('#GroupURLs').empty();
 
             data = data.sort((a, b) => {
