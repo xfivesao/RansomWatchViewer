@@ -100,12 +100,11 @@ a:hover, a:focus {
     text-overflow: ellipsis;
     overflow: scroll;
     overflow-x: hidden;
-    max-height: calc(100% - 50px);
-    max-height: -moz-calc(100% - 50px);
-    max-height: -webkit-calc(100% - 50px);
+    max-height: calc(100% - 35px);
+    max-height: -moz-calc(100% - 35px);
+    max-height: -webkit-calc(100% - 35px);
     left: 300px;
-    right: 15px;
-    top: 15px;
+    right:0;
 }
 .article {
     width: 100%;
@@ -192,9 +191,15 @@ a:hover, a:focus {
     margin-bottom: 15px;
 
 }
+
+#ticker h1 .count{
+	font-size:medium;
+	padding-left:10px;
+}
+
 #ticker
 {
-	top:30px;
+	top:20px;
 }
 
 #overlay {

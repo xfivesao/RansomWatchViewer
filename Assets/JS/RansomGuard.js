@@ -118,34 +118,50 @@ function GetRansomPostsData(sURL) {
 			}
 			else
 			{
-				var Today = $("<div></div>").append("<h1>Today</h1>");
-				var Yesterday = $("<div></div>").append("<h1>Yesterday</h1>");
-				var Older = $("<div></div>").append("<h1>Older</h1>");
-			
-				$.each(data, function (key, val) 
-				{	         
-					var date_discovered = Date.parse(val.discovered);			 
-					var article = CreateArticle(val.post_title,val.group_name,val.discovered);
-				 
-					var age = DaysSince(date_discovered);
-				 
-					if(age < 1)
-					{
-						Today.append(article)
-					}
-					else if (age >= 1 && age < 2)
-					{
-						Yesterday.append(article)
-					}
-					else
-					{
-						Older.append(article)
-					}				 
 
-				});
-				DosTable.append(Today);
-				DosTable.append(Yesterday);
-				DosTable.append( Older);
+				let day = (new Date()).getDay();	
+				let loop = day;				
+				if(day == 1){loop=0}
+				if(day == 0){loop=7}				
+				var dayOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];		
+				
+				for (var i = loop; i >= 1; i--) 
+				{					
+					if(i == (day))
+					{
+						var found = data.filter(function(item) { return DaysSince(Date.parse(item.discovered)) < 1 ; });
+						var Today = $("<div></div>").append("<h1>Today"+"<span class=\"count\">(" + found.length + ")</span></h1>");
+						FilteredLoop(found,Today)
+						DosTable.append(Today);
+					}
+					else if(i == (day-1))
+					{
+						var found = data.filter(function(item) { return DaysSince(Date.parse(item.discovered)) == (day-i) ; });
+						var Yesterday = $("<div></div>").append("<h1>Yesterday"+"<span class=\"count\">(" + found.length + ")</span></h1>");
+						FilteredLoop(found,Yesterday)
+						DosTable.append(Yesterday);
+					}
+					else					
+					{
+						var found = data.filter(function(item) { return DaysSince(Date.parse(item.discovered)) == (day-i) ; });
+						const weekday = $("<div></div>").append("<h1>"+ dayOfWeek[i] +"<span class=\"count\">(" + found.length + ")</span></h1>");
+						FilteredLoop(found,weekday)
+						DosTable.append(weekday);
+					}
+				}
+				
+				var lstWeekItems = data.filter(function(item) { return DaysSince(Date.parse(item.discovered)) >= day &&  DaysSince(Date.parse(item.discovered)) < day + 7 ; });				
+				const latWeek = $("<div></div>").append("<h1>"+ "LastWeek" + "<span class=\"count\">(" + lstWeekItems.length + ")</span></h1>");
+				FilteredLoop(lstWeekItems,latWeek)
+				DosTable.append(latWeek);
+
+				
+				var olderItems = data.filter(function(item) { return DaysSince(Date.parse(item.discovered)) >= (day+7) ; });				
+				const older = $("<div></div>").append("<h1>"+ "Older" + "<span class=\"count\">(" + olderItems.length + ")</span></h1>");
+				FilteredLoop(olderItems,older)
+				DosTable.append(older);
+	
+		
 			}
 			
             HideOverlay();
@@ -159,13 +175,24 @@ function GetRansomPostsData(sURL) {
 
 }
 
+function FilteredLoop(data,Today)
+{
+	$.each(data, function (key, val) 
+	{	         
+		var dateT = GetDate(val.discovered)
+		var age = DaysSince(Date.parse(val.discovered));			
+	 	var article = CreateArticle(val.post_title,val.group_name,dateT);			 
+		Today.append(article);
+	});		
+}
+
 function CreateArticle(title,group,date)
 {
 	var article = $("<div class=\"article\"></div>");
 	var title = $("<span class=\"title\"></span>").append(title);
 	var sub = $("<div class=\"sub\"></div>")
 	var group = $("<span class=\"group\"></span>").append(group);
-	var date = $("<span class=\"date\"></span>").append(GetDate(date));
+	var date = $("<span class=\"date\"></span>").append(date);
 	article.append(title);
 	sub.append(group);
 	sub.append(date);
