@@ -100,12 +100,12 @@ a:hover, a:focus {
     text-overflow: ellipsis;
     overflow: scroll;
     overflow-x: hidden;
-    max-height: calc(100% - 120px);
-    max-height: -moz-calc(100% - 120px);
-    max-height: -webkit-calc(100% - 120px);
+    max-height: calc(100% - 50px);
+    max-height: -moz-calc(100% - 50px);
+    max-height: -webkit-calc(100% - 50px);
     left: 300px;
     right: 15px;
-    top: 60px;
+    top: 15px;
 
 }
 .article {

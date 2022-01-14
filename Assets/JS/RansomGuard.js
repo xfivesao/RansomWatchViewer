@@ -22,6 +22,16 @@ function CRTFlicker() {
     element.classList.toggle("crt");
 }
 
+function DaysSince(post_date)
+{
+	var date1 = new Date(post_date);
+	var date2 = new Date();
+
+	var Difference_In_Time = date2.getTime() - date1.getTime();
+  
+	return  Difference_In_Time / (1000 * 3600 * 24);
+
+}
 
 function GetRansomPostsData(sURL) {
     var DosTable = $('#ticker');
@@ -52,11 +62,43 @@ function GetRansomPostsData(sURL) {
 
             });
 
-            $.each(data, function (key, val) {
-
-                DosTable.append("<div class=\"article\"><span class=\"title\">" + val.post_title + "</span><div class=\"sub\"><span class=\"group\">" + val.group_name + "</span><span class=\"date\">" + val.discovered.split(' ')[0] + "</span></div>");
+			var Today = $("<div></div>").append("<h1>Today</h1>");
+			var Yesterday = $("<div></div>").append("<h1>Yesterday</h1>");
+			var Older = $("<div></div>").append("<h1>Older</h1>");
+			
+            $.each(data, function (key, val) 
+			{	         
+				 var date_discovered = Date.parse(val.discovered);				 
+				 
+				 var article = $("<div class=\"article\"></div>");
+				 var title = $("<span class=\"title\"></span>").append(val.post_title);
+				 var sub = $("<div class=\"sub\"></div>")
+				 var group = $("<span class=\"group\"></span>").append(val.group_name);
+				 var date = $("<span class=\"date\"></span>").append(GetDate(date_discovered));
+				 article.append(title);
+				 sub.append(group);
+				 sub.append(date);
+				 article.append(sub);
+				 
+				 var age = DaysSince(date_discovered);
+				 
+				 if(age < 1)
+				 {
+					Today.append(article)
+				 }
+				 else if (age >= 1 && age <= 2)
+				 {
+					 Yesterday.append(article)
+				 }
+				 else
+				 {
+					 Older.append(article)
+				 }
 
             });
+			DosTable.append(Today);
+			DosTable.append(Yesterday);
+			DosTable.append( Older);
             HideOverlay();
 
         },
@@ -86,6 +128,38 @@ function AjaxError(jqXHR, exception) {
         msg = 'Uncaught Error.\n' + jqXHR.responseText;
     }
     ShowOverlay("Error", msg, 0, 1);
+}
+
+function GetDate(d)
+{
+	var date= new Date(d)
+    var aaaa = date.getUTCFullYear();
+    var gg = date.getUTCDate();
+    var mm = (date.getUTCMonth() + 1);
+
+    if (gg < 10)
+        gg = "0" + gg;
+
+    if (mm < 10)
+        mm = "0" + mm;
+
+    var cur_day = aaaa + "-" + mm + "-" + gg;
+
+    var hours = date.getUTCHours()
+    var minutes = date.getUTCMinutes()
+    var seconds = date.getUTCSeconds();
+
+    if (hours < 10)
+        hours = "0" + hours;
+
+    if (minutes < 10)
+        minutes = "0" + minutes;
+
+    if (seconds < 10)
+        seconds = "0" + seconds;
+
+    return cur_day + " " + hours + ":" + minutes + ":" + seconds;
+
 }
 
 function GetRansomGroupsData(sURL) {
