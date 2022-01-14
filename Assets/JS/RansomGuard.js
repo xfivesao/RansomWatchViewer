@@ -10,12 +10,12 @@ function LisPostsBy()
 	if(ORDERBYGROUP)
 	{
 		ORDERBYGROUP = false;
-		$("#sortby").text("by Date")
+		$("#sortby").text("by Group")
 	}		
 	else
 	{
 		ORDERBYGROUP = true;
-		$("#sortby").text("by Group")
+		$("#sortby").text("by Date")
 	}
 	LoadData();
 }
