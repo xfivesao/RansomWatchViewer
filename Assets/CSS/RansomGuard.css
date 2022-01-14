@@ -96,7 +96,7 @@ a:hover, a:focus {
 }
 .Posts {
     position: fixed;
-    white-space: nowrap;
+    /* white-space: nowrap; */
     text-overflow: ellipsis;
     overflow: scroll;
     overflow-x: hidden;
@@ -106,13 +106,13 @@ a:hover, a:focus {
     left: 300px;
     right: 15px;
     top: 15px;
-
 }
 .article {
     width: 100%;
     margin-bottom: 15px;
-
 }
+
+
 .article .sub {
     width: 100%;
 }
@@ -185,6 +185,18 @@ a:hover, a:focus {
     color: #666666;
     font-style: italic;
 }
+
+
+#ticker h1 {
+    width: 100%;
+    margin-bottom: 15px;
+
+}
+#ticker
+{
+	top:30px;
+}
+
 #overlay {
     width: 100%;
     height: 100%;
@@ -290,6 +302,11 @@ a:hover, a:focus {
         left: 15px;
         top: 45px;
     }
+	
+	#ticker
+{
+	top:10px;
+}
 }
 @media screen and (max-width:480px) {
     .TopNav li a {
@@ -306,4 +323,8 @@ a:hover, a:focus {
         left: 15px;
         top: 45px;
     }
+		#ticker
+{
+	top:10px;
+}
 }

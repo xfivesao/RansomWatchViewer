@@ -182,12 +182,11 @@ function GetRansomGroupsData(sURL) {
 
             data = data.sort((a, b) => {
                 let retval = 0;
-                if (retval === 0)
-                    retval = a.name < b.name ? -1 : 1;
+               if (retval === 0)
+                    retval = a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
                 return retval;
             });
-
-
+			
             $.each(data, function (key, val) {
 
                 $.each(val.locations, function (keys, vals) {
