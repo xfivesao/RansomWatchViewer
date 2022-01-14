@@ -2,9 +2,10 @@
 //var RANSOMWATCH_POSTS = "https://raw.githubusercontent.com/thetanz/ransomwatch/main/posts.json";
 var RANSOMWATCH_GROUPS = "https://raw.githubusercontent.com/JMousqueton/ransomwatch/main/groups.json"
 var RANSOMWATCH_POSTS = "https://raw.githubusercontent.com/JMousqueton/ransomwatch/main/posts.json"
-var RANDON_BG_TIMER = 30000;
-
+var RANDON_BG_TIMER = 300000;
 var ORDERBYGROUP = false;
+
+var LINKS;
 
 
 function LisPostsBy()
@@ -186,12 +187,46 @@ function FilteredLoop(data,Today)
 	});		
 }
 
+function ShowGroupLinks(grp)
+{
+	
+	if (links != null)
+	{
+    	var grp_links = links.filter(function(item) { return item.name == grp; });	
+		if(grp_links != null)
+			{
+				$Links = $("<ul></ul")
+				 $.each(grp_links[0].locations, function (keys, vals) {
+
+                    var cl = "";
+                    var slugtitle = vals.title;
+                    if (slugtitle == null) {
+                        slugtitle = ""
+                    }
+                    if (!vals.available) {
+                        cl = "inactive";
+                        slugtitle += " (inactive)"
+                    }
+					 
+					
+                    $Links.append("<li><a target=\"_blank\" class=\"" + cl + "\" href=\"" + vals.slug + "\" title=\"" + slugtitle + "\">" + grp_links[0].name + "</a></li>");
+					 
+					 
+
+                });
+				ShowOverlay(grp_links[0].name, $Links,false,false);
+				
+			}
+	}
+	
+}
+
 function CreateArticle(title,group,date)
 {
 	var article = $("<div class=\"article\"></div>");
 	var title = $("<span class=\"title\"></span>").append(title);
 	var sub = $("<div class=\"sub\"></div>")
-	var group = $("<span class=\"group\"></span>").append(group);
+	var group = $("<span class=\"group\"></span>").append("<a href=\"javascript:void(0);\" onclick=\"ShowGroupLinks('"+group+"')\">"+ group + "</a>");
 	var date = $("<span class=\"date\"></span>").append(date);
 	article.append(title);
 	sub.append(group);
@@ -252,10 +287,7 @@ function GetDate(d)
 
 }
 
-function GetRansomGroupsData(sURL) {
-
-
-    
+function GetRansomGroupsData(sURL) {    
 
     $.ajax({
         url: sURL,
@@ -276,6 +308,8 @@ function GetRansomGroupsData(sURL) {
                     retval = a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
                 return retval;
             });
+			
+			links = data;
 			
             $.each(data, function (key, val) {
 
@@ -311,7 +345,7 @@ function GetRansomGroupsData(sURL) {
 
 function ShowOverlay(title, message, loading, error) {
     $('#overlay').show();
-    $('#overlay .message').text(message);
+    $('#overlay .message').html(message);
     $('#overlay .title').text(title);
 
     if (!loading) {

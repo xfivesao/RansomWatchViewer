@@ -210,6 +210,18 @@ a:hover, a:focus {
     position: fixed;
     display: none;
 }
+
+.popupBox ul
+{
+	list-style-type: none;
+	padding: 0 0 0 0 ;
+}
+
+.popupBox .inactive{
+	    color: #666666;
+    font-style: italic;
+}
+
 .popupBox {
     padding: 16px 20.8px;
     margin-bottom: 20px;
