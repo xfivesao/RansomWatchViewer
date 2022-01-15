@@ -75,7 +75,7 @@ function GetRansomPostsData(sURL) {
 
             });
 
-
+			$('#sideList').empty();
             if (ORDERBYGROUP) {
                 const filterResults = (results) => {
                     const flags = [],
@@ -99,8 +99,8 @@ function GetRansomPostsData(sURL) {
                     var found = data.filter(function (item) {
                         return item.group_name == val.group_name;
                     });
-                    var GroupList = $("<div></div>").append("<h1>" + val.group_name + "<span class=\"count\">(" + found.length + ")</span></h1>");
-
+                    var GroupList = $("<div></div>").append("<h1 id=\""+ val.group_name +"\">" + val.group_name + "<span class=\"count\">(" + found.length + ")</span></h1>");
+					$('#sideList').append("<li><a href=\"#" + val.group_name + "\" title=\"" + val.group_name + "\">" + val.group_name + "</a></li>");
                     $.each(data, function (postkey, post) {
                         if (post.group_name == val.group_name) {
                             GroupList.append(CreateArticle(post.post_title, post.group_name, post.discovered));
@@ -111,15 +111,20 @@ function GetRansomPostsData(sURL) {
 
 
             } else {
-
-                let day = (new Date()).getDay();
+				
+				const currentdate = (new Date())
+                let day = currentdate.getDay();;
+				let year = currentdate.getFullYear();
+				var thisMonthDays = currentdate.getDate() - (day + 7);
                 let loop = day;
+				
                 if (day == 1) {
                     loop = 0
                 }
                 if (day == 0) {
                     loop = 7
                 }
+				
                 var dayOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
                 for (var i = loop; i >= 1; i--) {
@@ -127,18 +132,24 @@ function GetRansomPostsData(sURL) {
                         var found = data.filter(function (item) {
                             return DaysSince(Date.parse(item.discovered)) < 1;
                         });
-                        DosTable.append(GetDateFilteredPost('Today', found));
+                        if (found.length > 0) {
+                            DosTable.append(GetDateFilteredPost('Today', found));
+                        }
                     } else if (i == (day - 1)) {
                         var found = data.filter(function (item) {
                             return DaysSince(Date.parse(item.discovered)) == (day - i);
                         });
-                        DosTable.append(GetDateFilteredPost('Yesterday', found));
+                        if (found.length > 0) {
+                            DosTable.append(GetDateFilteredPost('Yesterday', found));
+                        }
                     } else {
                         var found = data.filter(function (item) {
                             return DaysSince(Date.parse(item.discovered)) == (day - i);
                         });
 
-                        DosTable.append(GetDateFilteredPost(dayOfWeek[i], found));
+                        if (found.length > 0) {
+                            DosTable.append(GetDateFilteredPost(dayOfWeek[i], found));
+                        }
 
                     }
                 }
@@ -147,24 +158,35 @@ function GetRansomPostsData(sURL) {
                     return DaysSince(Date.parse(item.discovered)) >= day && DaysSince(Date.parse(item.discovered)) < day + 7;
                 });
 
-                DosTable.append(GetDateFilteredPost('Last Week', lstWeekItems));
-
-
-                var thisMonthDays = (new Date).getDate() - (day + 7);
-                console.log(">" + (day + 7) + "<" + (day + 7 + thisMonthDays));
-                if (thisMonthDays > 0) {
+                if (lstWeekItems.length > 0) {
+                    DosTable.append(GetDateFilteredPost('Last Week', lstWeekItems));
+                }
+                
+                 if (thisMonthDays > 0) {
                     var thisMonth = data.filter(function (item) {
                         return DaysSince(Date.parse(item.discovered)) >= (day + 7) && DaysSince(Date.parse(item.discovered)) < (day + 7 + thisMonthDays);
                     });
                     DosTable.append(GetDateFilteredPost('Earlier This Month', thisMonth));
                 }
 
-
-                var HistoricalItems = data.filter(function (item) {
-                    return DaysSince(Date.parse(item.discovered)) >= (day + 7 + thisMonthDays);
+                var thisYear = data.filter(function (item) {
+                    return DaysSince(Date.parse(item.discovered)) >= (day + 7 + thisMonthDays) && DaysSince(Date.parse(item.discovered)) <= DaysSince(Date.parse(new Date(year,0,1)));
                 });
 
-                DosTable.append(GetDateFilteredPost('Historical', HistoricalItems));
+                DosTable.append(GetDateFilteredPost('Earlier This Year', thisYear));
+				
+				
+				for (var i = year-1; i >= 2020; i--) 
+				{
+					 console.log(i);
+					console.log( Date.parse(new Date(i,31,12))   +"  " +  Date.parse(new Date(i,1,1)))
+					 const byYear = data.filter(function (item) 
+					{
+						 return Date.parse(item.discovered) <= Date.parse(new Date(i,11,31)) && Date.parse(item.discovered) >= Date.parse(new Date(i,0,1));
+					 });
+					
+					if(byYear.length >0) {DosTable.append(GetDateFilteredPost(i, byYear));}									   
+				}
             }
 
             HideOverlay();
@@ -178,8 +200,12 @@ function GetRansomPostsData(sURL) {
 
 }
 
-function GetDateFilteredPost(selectioName, items) {
-    const selection = $("<div></div>").append("<h1>" + selectioName + "<span class=\"count\">(" + items.length + ")</span></h1>");
+function GetDateFilteredPost(selectioName, items) 
+{
+    const selection = $("<div></div>").append("<h1 id=\""+selectioName+"\">" + selectioName + "<span class=\"count\">(" + items.length + ")</span></h1>");
+	
+	$('#sideList').append("<li><a href=\"#" + selectioName + "\" title=\"" + selectioName + "\">" + selectioName + "</a></li>");
+	
     FilteredLoop(items, selection)
     return selection;
 }
@@ -315,7 +341,7 @@ function GetRansomGroupsData(sURL) {
 
         },
         success: function (data) {
-            $('#sideList').empty();
+
             $('#GroupURLs').empty();
 
             data = data.sort((a, b) => {
@@ -344,7 +370,7 @@ function GetRansomGroupsData(sURL) {
 
                     $('#GroupURLs').append("<li><a target=\"_blank\" class=\"" + cl + "\" href=\"" + vals.slug + "\" title=\"" + slugtitle + "\">" + val.name + "</a></li>");
 
-                    $('#sideList').append("<li><a target=\"_blank\" class=\"" + cl + "\" href=\"" + vals.slug + "\" title=\"" + slugtitle + "\">" + val.name + "</a></li>");
+                   
                 });
 
             });
