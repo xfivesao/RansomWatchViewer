@@ -76,6 +76,7 @@ function GetRansomPostsData(sURL) {
             });
 
 			$('#sideList').empty();
+			$('#JumpLinks').empty();
             if (ORDERBYGROUP) {
                 const filterResults = (results) => {
                     const flags = [],
@@ -101,6 +102,9 @@ function GetRansomPostsData(sURL) {
                     });
                     var GroupList = $("<div></div>").append("<h1 id=\""+ val.group_name +"\">" + val.group_name + "<span class=\"count\">(" + found.length + ")</span></h1>");
 					$('#sideList').append("<li><a href=\"#" + val.group_name + "\" title=\"" + val.group_name + "\">" + val.group_name + " <small>("+found.length+")</small></a></li>");
+					
+					$('#JumpLinks').append("<li><a href=\"#" + val.group_name + "\" title=\"" + val.group_name + "\">" + val.group_name + " <small>("+found.length+")</small></a></li>");
+					
                     $.each(data, function (postkey, post) {
                         if (post.group_name == val.group_name) {
                             GroupList.append(CreateArticle(post.post_title, post.group_name, post.discovered));
@@ -173,7 +177,7 @@ function GetRansomPostsData(sURL) {
                     return DaysSince(Date.parse(item.discovered)) >= (day + 7 + thisMonthDays) && DaysSince(Date.parse(item.discovered)) <= DaysSince(Date.parse(new Date(year,0,1)));
                 });
 
-                DosTable.append(GetDateFilteredPost('This Year', thisYear));
+                if(thisYear.length>0){DosTable.append(GetDateFilteredPost('This Year', thisYear));}
 				
 				
 				for (var i = year-1; i >= 2020; i--) 
@@ -205,7 +209,7 @@ function GetDateFilteredPost(selectioName, items)
     const selection = $("<div></div>").append("<h1 id=\""+selectioName+"\">" + selectioName + "<span class=\"count\">(" + items.length + ")</span></h1>");
 	
 	$('#sideList').append("<li><a href=\"#" + selectioName + "\" title=\"" + selectioName + "\">" + selectioName + " <small>("+items.length+")</small></a></li>");
-	
+	$('#JumpLinks').append("<li><a href=\"#" + selectioName + "\" title=\"" + selectioName + "\">" + selectioName + " <small>("+items.length+")</small></a></li>");
     FilteredLoop(items, selection)
     return selection;
 }
@@ -342,39 +346,7 @@ function GetRansomGroupsData(sURL) {
         },
         success: function (data) {
 
-            $('#GroupURLs').empty();
-
-            data = data.sort((a, b) => {
-                let retval = 0;
-                if (retval === 0)
-                    retval = a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
-                return retval;
-            });
-
             links = data;
-
-            $.each(data, function (key, val) {
-
-                $.each(val.locations, function (keys, vals) {
-
-                    var cl = "";
-                    var slugtitle = vals.title;
-                    if (slugtitle == null) {
-                        slugtitle = ""
-                    }
-                    if (!vals.available) {
-                        cl = "inactive";
-                        slugtitle += " (inactive)"
-                    }
-
-
-                    $('#GroupURLs').append("<li><a target=\"_blank\" class=\"" + cl + "\" href=\"" + vals.slug + "\" title=\"" + slugtitle + "\">" + val.name + "</a></li>");
-
-                   
-                });
-
-            });
-
             HideOverlay();
         },
         error: function (jqXHR, exception) {
