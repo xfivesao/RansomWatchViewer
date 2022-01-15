@@ -100,7 +100,7 @@ function GetRansomPostsData(sURL) {
                         return item.group_name == val.group_name;
                     });
                     var GroupList = $("<div></div>").append("<h1 id=\""+ val.group_name +"\">" + val.group_name + "<span class=\"count\">(" + found.length + ")</span></h1>");
-					$('#sideList').append("<li><a href=\"#" + val.group_name + "\" title=\"" + val.group_name + "\">" + val.group_name + " <small>()"+found.length+")</small></a></li>");
+					$('#sideList').append("<li><a href=\"#" + val.group_name + "\" title=\"" + val.group_name + "\">" + val.group_name + " <small>("+found.length+")</small></a></li>");
                     $.each(data, function (postkey, post) {
                         if (post.group_name == val.group_name) {
                             GroupList.append(CreateArticle(post.post_title, post.group_name, post.discovered));
@@ -204,7 +204,7 @@ function GetDateFilteredPost(selectioName, items)
 {
     const selection = $("<div></div>").append("<h1 id=\""+selectioName+"\">" + selectioName + "<span class=\"count\">(" + items.length + ")</span></h1>");
 	
-	$('#sideList').append("<li><a href=\"#" + selectioName + "\" title=\"" + selectioName + "\">" + selectioName + " <small>()"+items.length+")</small></a></li>");
+	$('#sideList').append("<li><a href=\"#" + selectioName + "\" title=\"" + selectioName + "\">" + selectioName + " <small>("+items.length+")</small></a></li>");
 	
     FilteredLoop(items, selection)
     return selection;
