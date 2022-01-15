@@ -6,17 +6,29 @@ var RANDON_BG_TIMER = 300000;
 var ORDERBYGROUP = false;
 
 var LINKS;
-
+var POSTS;
 
 function LisPostsBy() {
-    if (ORDERBYGROUP) {
+    var SortMethod = "Sorting by Date"
+    if (ORDERBYGROUP) 
+	{
         ORDERBYGROUP = false;
         $("#sortby").text("by Group")
-    } else {
+        
+    } else 
+	{
         ORDERBYGROUP = true;
+		SortMethod = 'Sorting by Group';
         $("#sortby").text("by Date")
     }
-    LoadData();
+
+    ShowOverlay('Processing....', SortMethod, 1);
+
+    $.when().then(function (x) {
+        LoadData();
+    });
+
+
 }
 
 function SourcesMenu() {
@@ -44,8 +56,143 @@ function DaysSince(post_date) {
 
 }
 
+
+function ProcessPostsData() {
+    if (POSTS != null) {
+
+
+        var DosTable = $('#ticker');
+        DosTable.empty();
+
+        $('#sideList').empty();
+		$(".SideNav").hide();
+        if (ORDERBYGROUP) {
+            const filterResults = (results) => {
+                const flags = [],
+                    output = [];
+                results.forEach((result) => {
+                    if (flags.indexOf(result.group_name) < 0) {
+                        output.push(result)
+                        flags.push(result.group_name)
+                    }
+                })
+                return output;
+            }
+
+            POSTS = POSTS.sort((a, b) => {
+                let retval = 0;
+                retval = a.group_name < b.group_name ? -1 : 1;
+                return retval;
+            });
+
+            $.each(filterResults(POSTS), function (groupkey, val) {
+                var found = POSTS.filter(function (item) {
+                    return item.group_name == val.group_name;
+                });
+                var GroupList = $("<div></div>").append("<h1 id=\"" + val.group_name + "\">" + val.group_name + "<span class=\"count\">(" + found.length + ")</span></h1>");
+                $('#sideList').append("<li><a href=\"#" + val.group_name + "\" title=\"" + val.group_name + "\">" + val.group_name + " <small>(" + found.length + ")</small></a></li>");
+
+
+                $.each(POSTS, function (postkey, post) {
+                    if (post.group_name == val.group_name) {
+                        GroupList.append(CreateArticle(post.post_title, post.group_name, post.discovered));
+                    }
+                });
+                DosTable.append(GroupList);
+            });
+
+
+        } else {
+
+            const currentdate = (new Date())
+            let day = currentdate.getDay();;
+            let year = currentdate.getFullYear();
+            var thisMonthDays = currentdate.getDate() - (day + 7);
+            let loop = day;
+
+            if (day == 1) {
+                loop = 0
+            }
+            if (day == 0) {
+                loop = 7
+            }
+
+            var dayOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+            for (var i = loop; i >= 1; i--) {
+                if (i == (day)) {
+                    var found = POSTS.filter(function (item) {
+                        return DaysSince(Date.parse(item.discovered)) < 1;
+                    });
+                    if (found.length > 0) {
+                        DosTable.append(GetDateFilteredPost('Today', found));
+                    }
+                } else if (i == (day - 1)) {
+                    var found = POSTS.filter(function (item) {
+                        return DaysSince(Date.parse(item.discovered)) == (day - i);
+                    });
+                    if (found.length > 0) {
+                        DosTable.append(GetDateFilteredPost('Yesterday', found));
+                    }
+                } else {
+                    var found = POSTS.filter(function (item) {
+                        return DaysSince(Date.parse(item.discovered)) == (day - i);
+                    });
+
+                    if (found.length > 0) {
+                        DosTable.append(GetDateFilteredPost(dayOfWeek[i], found));
+                    }
+
+                }
+            }
+
+            var lstWeekItems = POSTS.filter(function (item) {
+                return DaysSince(Date.parse(item.discovered)) >= day && DaysSince(Date.parse(item.discovered)) < day + 7;
+            });
+
+            if (lstWeekItems.length > 0) {
+                DosTable.append(GetDateFilteredPost('Last Week', lstWeekItems));
+            }
+
+            if (thisMonthDays > 0) {
+                var thisMonth = POSTS.filter(function (item) {
+                    return DaysSince(Date.parse(item.discovered)) >= (day + 7) && DaysSince(Date.parse(item.discovered)) < (day + 7 + thisMonthDays);
+                });
+                DosTable.append(GetDateFilteredPost('This Month', thisMonth));
+            }
+
+            var thisYear = POSTS.filter(function (item) {
+                return DaysSince(Date.parse(item.discovered)) >= (day + 7 + thisMonthDays) && DaysSince(Date.parse(item.discovered)) <= DaysSince(Date.parse(new Date(year, 0, 1)));
+            });
+
+            if (thisYear.length > 0) {
+                DosTable.append(GetDateFilteredPost('This Year', thisYear));
+            }
+
+
+            for (var i = year - 1; i >= 2020; i--) {
+                console.log(i);
+                console.log(Date.parse(new Date(i, 31, 12)) + "  " + Date.parse(new Date(i, 1, 1)))
+                const byYear = POSTS.filter(function (item) {
+                    return Date.parse(item.discovered) <= Date.parse(new Date(i, 11, 31)) && Date.parse(item.discovered) >= Date.parse(new Date(i, 0, 1));
+                });
+
+                if (byYear.length > 0) {
+                    DosTable.append(GetDateFilteredPost(i, byYear));
+                }
+            }
+        }
+
+        $('#JumpLinks').empty();
+        $("#sideList").children().clone().appendTo("#JumpLinks");
+		
+        HideOverlay();
+		$(".SideNav").show();
+    }
+}
+
 function GetRansomPostsData(sURL) {
-    var DosTable = $('#ticker');
+
 
     $.ajax({
         url: sURL,
@@ -58,7 +205,6 @@ function GetRansomPostsData(sURL) {
             GetRansomGroupsData(RANSOMWATCH_GROUPS);
         },
         success: function (data) {
-            DosTable.empty();
             $('#ticker').show();
 
             //Sort records by date 
@@ -75,124 +221,9 @@ function GetRansomPostsData(sURL) {
 
             });
 
-			$('#sideList').empty();
-			$('#JumpLinks').empty();
-            if (ORDERBYGROUP) {
-                const filterResults = (results) => {
-                    const flags = [],
-                        output = [];
-                    results.forEach((result) => {
-                        if (flags.indexOf(result.group_name) < 0) {
-                            output.push(result)
-                            flags.push(result.group_name)
-                        }
-                    })
-                    return output;
-                }
 
-                data = data.sort((a, b) => {
-                    let retval = 0;
-                    retval = a.group_name < b.group_name ? -1 : 1;
-                    return retval;
-                });
-
-                $.each(filterResults(data), function (groupkey, val) {
-                    var found = data.filter(function (item) {
-                        return item.group_name == val.group_name;
-                    });
-                    var GroupList = $("<div></div>").append("<h1 id=\""+ val.group_name +"\">" + val.group_name + "<span class=\"count\">(" + found.length + ")</span></h1>");
-					$('#sideList').append("<li><a href=\"#" + val.group_name + "\" title=\"" + val.group_name + "\">" + val.group_name + " <small>("+found.length+")</small></a></li>");
-					
-					$('#JumpLinks').append("<li><a href=\"#" + val.group_name + "\" title=\"" + val.group_name + "\">" + val.group_name + " <small>("+found.length+")</small></a></li>");
-					
-                    $.each(data, function (postkey, post) {
-                        if (post.group_name == val.group_name) {
-                            GroupList.append(CreateArticle(post.post_title, post.group_name, post.discovered));
-                        }
-                    });
-                    DosTable.append(GroupList);
-                });
-
-
-            } else {
-				
-				const currentdate = (new Date())
-                let day = currentdate.getDay();;
-				let year = currentdate.getFullYear();
-				var thisMonthDays = currentdate.getDate() - (day + 7);
-                let loop = day;
-				
-                if (day == 1) {
-                    loop = 0
-                }
-                if (day == 0) {
-                    loop = 7
-                }
-				
-                var dayOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-
-                for (var i = loop; i >= 1; i--) {
-                    if (i == (day)) {
-                        var found = data.filter(function (item) {
-                            return DaysSince(Date.parse(item.discovered)) < 1;
-                        });
-                        if (found.length > 0) {
-                            DosTable.append(GetDateFilteredPost('Today', found));
-                        }
-                    } else if (i == (day - 1)) {
-                        var found = data.filter(function (item) {
-                            return DaysSince(Date.parse(item.discovered)) == (day - i);
-                        });
-                        if (found.length > 0) {
-                            DosTable.append(GetDateFilteredPost('Yesterday', found));
-                        }
-                    } else {
-                        var found = data.filter(function (item) {
-                            return DaysSince(Date.parse(item.discovered)) == (day - i);
-                        });
-
-                        if (found.length > 0) {
-                            DosTable.append(GetDateFilteredPost(dayOfWeek[i], found));
-                        }
-
-                    }
-                }
-
-                var lstWeekItems = data.filter(function (item) {
-                    return DaysSince(Date.parse(item.discovered)) >= day && DaysSince(Date.parse(item.discovered)) < day + 7;
-                });
-
-                if (lstWeekItems.length > 0) {
-                    DosTable.append(GetDateFilteredPost('Last Week', lstWeekItems));
-                }
-                
-                 if (thisMonthDays > 0) {
-                    var thisMonth = data.filter(function (item) {
-                        return DaysSince(Date.parse(item.discovered)) >= (day + 7) && DaysSince(Date.parse(item.discovered)) < (day + 7 + thisMonthDays);
-                    });
-                    DosTable.append(GetDateFilteredPost('This Month', thisMonth));
-                }
-
-                var thisYear = data.filter(function (item) {
-                    return DaysSince(Date.parse(item.discovered)) >= (day + 7 + thisMonthDays) && DaysSince(Date.parse(item.discovered)) <= DaysSince(Date.parse(new Date(year,0,1)));
-                });
-
-                if(thisYear.length>0){DosTable.append(GetDateFilteredPost('This Year', thisYear));}
-				
-				
-				for (var i = year-1; i >= 2020; i--) 
-				{
-					 console.log(i);
-					console.log( Date.parse(new Date(i,31,12))   +"  " +  Date.parse(new Date(i,1,1)))
-					 const byYear = data.filter(function (item) 
-					{
-						 return Date.parse(item.discovered) <= Date.parse(new Date(i,11,31)) && Date.parse(item.discovered) >= Date.parse(new Date(i,0,1));
-					 });
-					
-					if(byYear.length >0) {DosTable.append(GetDateFilteredPost(i, byYear));}									   
-				}
-            }
-
+            POSTS = data;
+            LoadData();
             HideOverlay();
 
         },
@@ -204,12 +235,11 @@ function GetRansomPostsData(sURL) {
 
 }
 
-function GetDateFilteredPost(selectioName, items) 
-{
-    const selection = $("<div></div>").append("<h1 id=\""+selectioName+"\">" + selectioName + "<span class=\"count\">(" + items.length + ")</span></h1>");
-	
-	$('#sideList').append("<li><a href=\"#" + selectioName + "\" title=\"" + selectioName + "\">" + selectioName + " <small>("+items.length+")</small></a></li>");
-	$('#JumpLinks').append("<li><a href=\"#" + selectioName + "\" title=\"" + selectioName + "\">" + selectioName + " <small>("+items.length+")</small></a></li>");
+function GetDateFilteredPost(selectioName, items) {
+    const selection = $("<div></div>").append("<h1 id=\"" + selectioName + "\">" + selectioName + "<span class=\"count\">(" + items.length + ")</span></h1>");
+
+    $('#sideList').append("<li><a href=\"#" + selectioName + "\" title=\"" + selectioName + "\">" + selectioName + " <small>(" + items.length + ")</small></a></li>");
+    $('#JumpLinks').append("<li><a href=\"#" + selectioName + "\" title=\"" + selectioName + "\">" + selectioName + " <small>(" + items.length + ")</small></a></li>");
     FilteredLoop(items, selection)
     return selection;
 }
@@ -357,6 +387,7 @@ function GetRansomGroupsData(sURL) {
 
 }
 
+
 function ShowOverlay(title, message, loading, error) {
 
     if (error) {
@@ -389,12 +420,18 @@ function HideOverlay() {
     $('#overlay').hide();
 }
 
-function LoadData() {
+function GetData() {
     GetRansomPostsData(RANSOMWATCH_POSTS);
 }
 
+
+function LoadData() {
+
+    ProcessPostsData();
+}
+
 function BGTimer() {
-    LoadData()
+    GetData();
     setTimeout("BGTimer()", RANDON_BG_TIMER);
 }
 
