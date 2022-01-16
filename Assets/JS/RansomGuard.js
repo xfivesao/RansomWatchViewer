@@ -1,24 +1,50 @@
-//var RANSOMWATCH_GROUPS = "https://raw.githubusercontent.com/thetanz/ransomwatch/main/groups.json";
-//var RANSOMWATCH_POSTS = "https://raw.githubusercontent.com/thetanz/ransomwatch/main/posts.json";
-var RANSOMWATCH_GROUPS = "https://raw.githubusercontent.com/JMousqueton/ransomwatch/main/groups.json"
-var RANSOMWATCH_POSTS = "https://raw.githubusercontent.com/JMousqueton/ransomwatch/main/posts.json"
+var RANSOMWATCH_GROUPS;
+var RANSOMWATCH_POSTS;
 var RANDON_BG_TIMER = 300000;
 var ORDERBYGROUP = false;
-
 var LINKS;
 var POSTS;
 
+const Sources = {
+    thetanz: {
+        POSTS: 'https://raw.githubusercontent.com/thetanz/ransomwatch/main/posts.json',
+        GROUPS: 'https://raw.githubusercontent.com/thetanz/ransomwatch/main/groups.json',
+		NAME: 'thetanz'
+    },
+    JMousqueton: {
+        POSTS: 'https://raw.githubusercontent.com/JMousqueton/ransomwatch/main/posts.json',
+        GROUPS: 'https://raw.githubusercontent.com/JMousqueton/ransomwatch/main/groups.json',
+		NAME: 'JMousqueton'
+    }
+}
+
+function SetSource(src) {
+    if (src == null) {
+        RANSOMWATCH_GROUPS = Sources['JMousqueton'].GROUPS;
+        RANSOMWATCH_POSTS = Sources['JMousqueton'].POSTS;
+    } else {
+        RANSOMWATCH_GROUPS = Sources[src].GROUPS;
+        RANSOMWATCH_POSTS = Sources[src].POSTS;
+    }
+	
+		
+	ShowOverlay('Processing....', "Source Update", 1);
+
+    $.when().then(function (x) {
+        LoadData();
+    });
+
+}
+
 function LisPostsBy() {
     var SortMethod = "Sorting by Date"
-    if (ORDERBYGROUP) 
-	{
+    if (ORDERBYGROUP) {
         ORDERBYGROUP = false;
         $("#sortby").text("by Group")
-        
-    } else 
-	{
+
+    } else {
         ORDERBYGROUP = true;
-		SortMethod = 'Sorting by Group';
+        SortMethod = 'Sorting by Group';
         $("#sortby").text("by Date")
     }
 
@@ -31,12 +57,16 @@ function LisPostsBy() {
 
 }
 
-function SourcesMenu() {
+function SourcesMenu() 
+{
     $('#SourceURLS').empty();
 
-    $('#SourceURLS').append("<li><a target=\"_blank\" href=\"" + RANSOMWATCH_GROUPS + "\" title=\"" + "Group Links" + "\">" + "Group Links" + "</a></li>");
+    for (var i in Sources) {
 
-    $('#SourceURLS').append("<li><a target=\"_blank\" href=\"" + RANSOMWATCH_POSTS + "\" title=\"" + "Posts" + "\">" + "Posts" + "</a></li>");
+        var src = $('<li><a target=\"_blank\" onclick=\"SetSource(\'' + Sources[i].NAME + '\');\" "\title=\"' +  Sources[i].NAME + '"\">' + Sources[i].NAME  + '</a></li>');
+
+        $('#SourceURLS').append(src);
+    }
 
 }
 
@@ -65,7 +95,7 @@ function ProcessPostsData() {
         DosTable.empty();
 
         $('#sideList').empty();
-	
+
         if (ORDERBYGROUP) {
             const filterResults = (results) => {
                 const flags = [],
@@ -104,35 +134,41 @@ function ProcessPostsData() {
 
         } else {
 
-			var dayOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday","Sunday"];
-				
+            var dayOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
             const currentdate = (new Date())
             let day = currentdate.getDay();;
             let year = currentdate.getFullYear();
             var thisMonthDays = currentdate.getDate() - (day + 7);
-		
-			let target = 1 
-			let date = new Date()
-			date.setDate(date.getDate() - ( date.getDay() == target ? 7 : (date.getDay() + (7 - target)) % 7 ))
-			let LastMonday = DaysSince(date);
-			
-			let loop = LastMonday;
-	
-            for (var i = 0; i <= loop; i++) 
-			{
-	                 var found = POSTS.filter(function (item) {
-                        return DaysSince(Date.parse(item.discovered)) == (day + i);
-                 });
 
-                 if (found.length > 0) {
-                        DosTable.append(GetDateFilteredPost(dayOfWeek[loop-i], found));
-                  }                
+            let target = 1
+            let date = new Date()
+            date.setDate(date.getDate() - (date.getDay() == target ? 7 : (date.getDay() + (7 - target)) % 7))
+            let LastMonday = DaysSince(date);
+
+            let loop = LastMonday;
+
+            for (var i = 0; i <= loop; i++) {
+                var found = POSTS.filter(function (item) {
+                    return DaysSince(Date.parse(item.discovered)) == (day + i);
+                });
+
+                if (found.length > 0) {
+                    if (i == 0) {
+                        DosTable.append(GetDateFilteredPost('Today', found));
+                    } else if (i == 1) {
+                        DosTable.append(GetDateFilteredPost('Yesterday', found));
+                    } else {
+                        DosTable.append(GetDateFilteredPost(dayOfWeek[loop - i], found));
+                    }
+
+                }
             }
-			
-			
-			//Last Week Items 
-			var from = LastMonday + 1
-			var until = LastMonday  + 7
+
+
+            //Last Week Items 
+            var from = LastMonday + 1
+            var until = LastMonday + 7
             var lstWeekItems = POSTS.filter(function (item) {
                 return DaysSince(Date.parse(item.discovered)) >= from && DaysSince(Date.parse(item.discovered)) <= until;
             });
@@ -140,11 +176,11 @@ function ProcessPostsData() {
             if (lstWeekItems.length > 0) {
                 DosTable.append(GetDateFilteredPost('Last Week', lstWeekItems));
             }
-			
-			
-			//Rest of Month
-			from = until+1;
-			until =  day + 7 +  thisMonthDays
+
+
+            //Rest of Month
+            from = until + 1;
+            until = day + 7 + thisMonthDays
 
             if (thisMonthDays > 0) {
                 var thisMonth = POSTS.filter(function (item) {
@@ -152,11 +188,11 @@ function ProcessPostsData() {
                 });
                 DosTable.append(GetDateFilteredPost('This Month', thisMonth));
             }
-				
-			
-			//Rest of this year
-			from = until
-			until = DaysSince(Date.parse(new Date(year, 0, 1)))
+
+
+            //Rest of this year
+            from = until
+            until = DaysSince(Date.parse(new Date(year, 0, 1)))
             var thisYear = POSTS.filter(function (item) {
                 return DaysSince(Date.parse(item.discovered)) >= from && DaysSince(Date.parse(item.discovered)) <= until;
             });
@@ -165,29 +201,28 @@ function ProcessPostsData() {
                 DosTable.append(GetDateFilteredPost('This Year', thisYear));
             }
 
-			//Remaining By Year
+            //Remaining By Year			
             for (var i = year - 1; i >= 2020; i--) {
-				
-				console.log(new Date(i, 11, 31, 23, 59, 59));
-				
-                console.log(Date.parse(new Date(i, 31, 12)) + "  " + Date.parse(new Date(i, 1, 1)))
-                const byYear = POSTS.filter(function (item) {
-                    return Date.parse(item.discovered) <= Date.parse(new Date(i, 11, 31, 23, 59, 59)) && Date.parse(item.discovered) >= Date.parse(new Date(i, 0, 1, 0, 0, 0));
-                });
 
-                if (byYear.length > 0) {
-                    DosTable.append(GetDateFilteredPost(i, byYear));
+                const byYear1 = POSTS.filter(function (item) {
+                    return Date.parse(item.discovered) >= Date.parse(new Date(i, 0, 1, 0, 0, 0)) && Date.parse(item.discovered) <= Date.parse(new Date(i, 11, 31, 23, 59, 59));
+                });
+                if (byYear1.length > 0) {
+                    DosTable.append(GetDateFilteredPost(i, byYear1));
                 }
+
+
             }
         }
 
         $('#JumpLinks').empty();
         $("#sideList").children().clone().appendTo("#JumpLinks");
-		
+
         HideOverlay();
 
     }
 }
+
 
 function GetRansomPostsData(sURL) {
 
@@ -434,6 +469,7 @@ function BGTimer() {
 }
 
 $(document).ready(function () {
+    SetSource();
     SourcesMenu();
     BGTimer()
 });
