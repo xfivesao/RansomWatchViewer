@@ -31,7 +31,7 @@ function SetSource(src) {
 	ShowOverlay('Processing....', "Source Update", 1);
 
     $.when().then(function (x) {
-        LoadData();
+       GetData();
     });
 
 }
