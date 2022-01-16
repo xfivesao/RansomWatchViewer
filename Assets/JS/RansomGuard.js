@@ -65,7 +65,7 @@ function ProcessPostsData() {
         DosTable.empty();
 
         $('#sideList').empty();
-		$(".SideNav").hide();
+	
         if (ORDERBYGROUP) {
             const filterResults = (results) => {
                 const flags = [],
@@ -104,77 +104,75 @@ function ProcessPostsData() {
 
         } else {
 
+			var dayOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday","Sunday"];
+				
             const currentdate = (new Date())
             let day = currentdate.getDay();;
             let year = currentdate.getFullYear();
             var thisMonthDays = currentdate.getDate() - (day + 7);
-            let loop = day;
+		
+			let target = 1 
+			let date = new Date()
+			date.setDate(date.getDate() - ( date.getDay() == target ? 7 : (date.getDay() + (7 - target)) % 7 ))
+			let LastMonday = DaysSince(date);
+			
+			let loop = LastMonday;
+	
+            for (var i = 0; i <= loop; i++) 
+			{
+	                 var found = POSTS.filter(function (item) {
+                        return DaysSince(Date.parse(item.discovered)) == (day + i);
+                 });
 
-            if (day == 1) {
-                loop = 0
+                 if (found.length > 0) {
+                        DosTable.append(GetDateFilteredPost(dayOfWeek[loop-i], found));
+                  }                
             }
-            if (day == 0) {
-                loop = 7
-            }
-
-            var dayOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-
-            for (var i = loop; i >= 1; i--) {
-                if (i == (day)) {
-                    var found = POSTS.filter(function (item) {
-                        return DaysSince(Date.parse(item.discovered)) < 1;
-                    });
-                    if (found.length > 0) {
-                        DosTable.append(GetDateFilteredPost('Today', found));
-                    }
-                } else if (i == (day - 1)) {
-                    var found = POSTS.filter(function (item) {
-                        return DaysSince(Date.parse(item.discovered)) == (day - i);
-                    });
-                    if (found.length > 0) {
-                        DosTable.append(GetDateFilteredPost('Yesterday', found));
-                    }
-                } else {
-                    var found = POSTS.filter(function (item) {
-                        return DaysSince(Date.parse(item.discovered)) == (day - i);
-                    });
-
-                    if (found.length > 0) {
-                        DosTable.append(GetDateFilteredPost(dayOfWeek[i], found));
-                    }
-
-                }
-            }
-
+			
+			
+			//Last Week Items 
+			var from = LastMonday + 1
+			var until = LastMonday  + 7
             var lstWeekItems = POSTS.filter(function (item) {
-                return DaysSince(Date.parse(item.discovered)) >= day && DaysSince(Date.parse(item.discovered)) < day + 7;
+                return DaysSince(Date.parse(item.discovered)) >= from && DaysSince(Date.parse(item.discovered)) <= until;
             });
 
             if (lstWeekItems.length > 0) {
                 DosTable.append(GetDateFilteredPost('Last Week', lstWeekItems));
             }
+			
+			
+			//Rest of Month
+			from = until+1;
+			until =  day + 7 +  thisMonthDays
 
             if (thisMonthDays > 0) {
                 var thisMonth = POSTS.filter(function (item) {
-                    return DaysSince(Date.parse(item.discovered)) >= (day + 7) && DaysSince(Date.parse(item.discovered)) < (day + 7 + thisMonthDays);
+                    return DaysSince(Date.parse(item.discovered)) >= from && DaysSince(Date.parse(item.discovered)) < until;
                 });
                 DosTable.append(GetDateFilteredPost('This Month', thisMonth));
             }
-
+				
+			
+			//Rest of this year
+			from = until
+			until = DaysSince(Date.parse(new Date(year, 0, 1)))
             var thisYear = POSTS.filter(function (item) {
-                return DaysSince(Date.parse(item.discovered)) >= (day + 7 + thisMonthDays) && DaysSince(Date.parse(item.discovered)) <= DaysSince(Date.parse(new Date(year, 0, 1)));
+                return DaysSince(Date.parse(item.discovered)) >= from && DaysSince(Date.parse(item.discovered)) <= until;
             });
 
             if (thisYear.length > 0) {
                 DosTable.append(GetDateFilteredPost('This Year', thisYear));
             }
 
-
+			//Remaining By Year
             for (var i = year - 1; i >= 2020; i--) {
-                console.log(i);
+				
+				console.log(new Date(i, 11, 31, 23, 59, 59));
+				
                 console.log(Date.parse(new Date(i, 31, 12)) + "  " + Date.parse(new Date(i, 1, 1)))
                 const byYear = POSTS.filter(function (item) {
-                    return Date.parse(item.discovered) <= Date.parse(new Date(i, 11, 31)) && Date.parse(item.discovered) >= Date.parse(new Date(i, 0, 1));
+                    return Date.parse(item.discovered) <= Date.parse(new Date(i, 11, 31, 23, 59, 59)) && Date.parse(item.discovered) >= Date.parse(new Date(i, 0, 1, 0, 0, 0));
                 });
 
                 if (byYear.length > 0) {
@@ -187,7 +185,7 @@ function ProcessPostsData() {
         $("#sideList").children().clone().appendTo("#JumpLinks");
 		
         HideOverlay();
-		$(".SideNav").show();
+
     }
 }
 
