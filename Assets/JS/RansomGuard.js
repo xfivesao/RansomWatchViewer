@@ -9,12 +9,12 @@ const Sources = {
     thetanz: {
         POSTS: 'https://raw.githubusercontent.com/thetanz/ransomwatch/main/posts.json',
         GROUPS: 'https://raw.githubusercontent.com/thetanz/ransomwatch/main/groups.json',
-		NAME: 'thetanz'
+        NAME: 'thetanz'
     },
     JMousqueton: {
         POSTS: 'https://raw.githubusercontent.com/JMousqueton/ransomwatch/main/posts.json',
         GROUPS: 'https://raw.githubusercontent.com/JMousqueton/ransomwatch/main/groups.json',
-		NAME: 'JMousqueton'
+        NAME: 'JMousqueton'
     }
 }
 
@@ -25,14 +25,14 @@ function SetSource(src) {
     } else {
         RANSOMWATCH_GROUPS = Sources[src].GROUPS;
         RANSOMWATCH_POSTS = Sources[src].POSTS;
-    }
-	
-		
-	ShowOverlay('Processing....', "Source Update", 1);
 
-    $.when().then(function (x) {
-       GetData();
-    });
+
+        ShowOverlay('Processing....', "Source Update " + Sources[src].NAME , 1);
+
+        $.when().then(function (x) {
+            GetData();
+        });
+    }
 
 }
 
@@ -57,13 +57,12 @@ function LisPostsBy() {
 
 }
 
-function SourcesMenu() 
-{
+function SourcesMenu() {
     $('#SourceURLS').empty();
 
     for (var i in Sources) {
 
-        var src = $('<li><a target=\"_blank\" onclick=\"SetSource(\'' + Sources[i].NAME + '\');\" "\title=\"' +  Sources[i].NAME + '"\">' + Sources[i].NAME  + '</a></li>');
+        var src = $('<li><a target=\"_blank\" onclick=\"SetSource(\'' + Sources[i].NAME + '\');\" "\title=\"' + Sources[i].NAME + '"\">' + Sources[i].NAME + '</a></li>');
 
         $('#SourceURLS').append(src);
     }
