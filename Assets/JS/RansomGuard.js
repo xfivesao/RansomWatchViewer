@@ -5,7 +5,7 @@ var ORDERBYGROUP = false;
 var LINKS;
 var POSTS;
 
-const Sources = {
+var Sources = {
     thetanz: {
         POSTS: 'https://raw.githubusercontent.com/thetanz/ransomwatch/main/posts.json',
         GROUPS: 'https://raw.githubusercontent.com/thetanz/ransomwatch/main/groups.json',
@@ -27,7 +27,7 @@ function SetSource(src) {
         RANSOMWATCH_POSTS = Sources[src].POSTS;
 
 
-        ShowOverlay('Processing....', "Source Update " + Sources[src].NAME , 1);
+        ShowOverlay('Processing....', "Source Update " + Sources[src].NAME, 1);
 
         $.when().then(function (x) {
             GetData();
