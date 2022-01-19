@@ -149,13 +149,12 @@ a:hover, a:focus {
     text-overflow: ellipsis;
     overflow: scroll;
     overflow-x: hidden;
-	min-height:150px;
+    min-height: 150px;
     max-height: calc(100% - 130px);
     max-height: -moz-calc(100% - 130px);
     max-height: -webkit-calc(100% - 130px);
     /* margin-bottom: 100px; */
     position: fixed;
-
 }
 .SideNav ul {
     list-style-type: none;
