@@ -70,10 +70,7 @@ function SourcesMenu() {
 }
 
 
-function CRTFlicker() {
-    var element = document.getElementById("main");
-    element.classList.toggle("crt");
-}
+
 
 function DaysSince(post_date) {
     var date1 = new Date(post_date);
@@ -95,17 +92,17 @@ function ProcessPostsData() {
         $('#sideList').empty();
 
         if (ORDERBYGROUP) {
-            const filterResults = (results) => {
+            var filterResults = (results => {
                 const flags = [],
                     output = [];
-                results.forEach((result) => {
+                results.forEach(result => {
                     if (flags.indexOf(result.group_name) < 0) {
                         output.push(result)
                         flags.push(result.group_name)
                     }
                 })
                 return output;
-            }
+            });
 
             POSTS = POSTS.sort((a, b) => {
                 let retval = 0;
@@ -140,7 +137,7 @@ function ProcessPostsData() {
             var lastDayOfTheWeek = firstDayOfTheWeek + 6;
 
 
-            var loop = currentdate.getDay() - 1;
+            var loop = lastDayOfTheWeek - firstDayOfTheWeek;
 
             //Days This Week
             for (var i = 0; i <= loop; i++) {
@@ -149,16 +146,16 @@ function ProcessPostsData() {
 
                 var newDay = new Date(start).getDay();
 
-                if (newDay == currentdate.getDay() && newDay != 0) {
+                if (newDay == currentdate.getDay()) {
                     GetDateFilteredPost('Today', start, end, POSTS);
                 } else {
                     GetDateFilteredPost(DayOfTheWeek[newDay], start, end, POSTS);
                 }
             }
-
-            //Days Last Week
-            var firstDayOfLastWeek = GetDate(new Date((new Date).setDate(firstDayOfTheWeek - 7)).setHours(0, 0, 0));
-            var lastDayOfLastWeek = GetDate(new Date((new Date).setDate(lastDayOfTheWeek - 7)).setHours(23, 59, 59));
+			
+	        //Days Last Week
+            var firstDayOfLastWeek = GetDate(new Date((new Date).setDate(firstDayOfTheWeek - (8 + loop))).setHours(0, 0, 0));
+            var lastDayOfLastWeek = GetDate(new Date((new Date).setDate(lastDayOfTheWeek - (8 + loop))).setHours(23, 59, 59));
             GetDateFilteredPost('Last Week', firstDayOfLastWeek, lastDayOfLastWeek, POSTS);
 
             //Days This Month
@@ -248,7 +245,7 @@ function GetRansomPostsData(sURL) {
 
 function GetDateFilteredPost(selectioName, start, end, data) {
 
-    console.log(selectioName + '   ' + start + ' then ' + end)
+
     const items = data.filter(function (item) {
         return Date.parse(item.discovered) >= Date.parse(start) && Date.parse(item.discovered) <= Date.parse(end);
     });
@@ -407,37 +404,8 @@ function GetRansomGroupsData(sURL) {
 }
 
 
-function ShowOverlay(title, message, loading, error) {
 
-    if (error) {
-        $('#overlay .popupBox').addClass("error");
-    } else {
-        $('#overlay .popupBox').removeClass('error');
-    }
 
-    $('#overlay').show();
-    $('#overlay .message').html(message);
-    $('#overlay .title').text(title);
-
-    if (!loading) {
-        $('#overlay .close').show();
-        $('#overlay .progress').hide();
-    } else {
-        $('#overlay .close').hide();
-        $('#overlay .progress').show();
-    }
-
-}
-
-function ShowAbout() {
-    ShowOverlay('RansomWatch Viewer', 'Presents the data from thetanz/ransomwatch lists', 0);
-}
-
-function HideOverlay() {
-    $('#overlay .message').empty();
-    $('#overlay .title').empty();
-    $('#overlay').hide();
-}
 
 function GetData() {
     GetRansomPostsData(RANSOMWATCH_POSTS);

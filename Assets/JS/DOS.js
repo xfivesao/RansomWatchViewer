@@ -1,3 +1,47 @@
+///////////////////////////////////////////////
+/* UI */
+///////////////////////////////////////////////
+function CRTFlicker() {
+    var element = document.getElementById("main");
+    element.classList.toggle("crt");
+}
+
+function ShowOverlay(title, message, loading, error) {
+
+    if (error) {
+        $('#overlay .popupBox').addClass("error");
+    } else {
+        $('#overlay .popupBox').removeClass('error');
+    }
+
+    $('#overlay').show();
+    $('#overlay .message').html(message);
+    $('#overlay .title').text(title);
+
+    if (!loading) {
+        $('#overlay .close').show();
+        $('#overlay .progress').hide();
+    } else {
+        $('#overlay .close').hide();
+        $('#overlay .progress').show();
+    }
+
+}
+
+function ShowAbout() {
+    ShowOverlay('RansomWatch Viewer', 'Presents the data from thetanz/ransomwatch lists', 0);
+}
+
+function HideOverlay() {
+    $('#overlay .message').empty();
+    $('#overlay .title').empty();
+    $('#overlay').hide();
+}
+
+
+///////////////////////////////////////////////
+/* COMMAND LINE*/
+///////////////////////////////////////////////
 var audioCtx;
 var BadCommandLimit = 10;
 
@@ -32,7 +76,7 @@ function beep(Freq, Duration) {
         oscillator.stop();
 
     } catch (err) {
-        conole.log(err.message);
+        console.log(err.message);
     }
 
 }
@@ -97,7 +141,7 @@ function BadCommand() {
 
 }
 
-function WriteToDos(output, showcursor) {
+function WriteToDos(output) {
 
     var prompt = "C:\\>";
     var showcursor = 1;

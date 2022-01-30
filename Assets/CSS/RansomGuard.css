@@ -32,10 +32,13 @@ a:hover, a:focus {
     color: #fefe54;
     background: #aa5500;
 }
+
+
+
 .TopNav {
     position: fixed;
     width: 100%;
-    z-index: 999;
+    z-index: 998;
 }
 .TopNav ul {
     list-style-type: none;
