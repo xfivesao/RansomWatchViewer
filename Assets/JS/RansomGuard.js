@@ -70,8 +70,6 @@ function SourcesMenu() {
 }
 
 
-
-
 function DaysSince(post_date) {
     var date1 = new Date(post_date);
     var date2 = new Date();
@@ -133,11 +131,14 @@ function ProcessPostsData() {
             const currentdate = (new Date())
             var DayOfTheWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 
-            var firstDayOfTheWeek = (currentdate.getDate() - currentdate.getDay()) + 1;
-            var lastDayOfTheWeek = firstDayOfTheWeek + 6;
+            var firstDayOfTheWeek = new Date((new Date).setDate((currentdate.getDate() - currentdate.getDay()) + 1));
+            var lastDayOfTheWeek = new Date((new Date).setDate((currentdate.getDate() + 5)));
 
-
-            var loop = lastDayOfTheWeek - firstDayOfTheWeek;
+            var day = currentdate.getDay()
+            var loop = 6
+            if (day != 0) {
+                loop = day - 1;
+            }
 
             //Days This Week
             for (var i = 0; i <= loop; i++) {
@@ -152,23 +153,16 @@ function ProcessPostsData() {
                     GetDateFilteredPost(DayOfTheWeek[newDay], start, end, POSTS);
                 }
             }
-			
-	        //Days Last Week
-            var firstDayOfLastWeek = GetDate(new Date((new Date).setDate(firstDayOfTheWeek - (8 + loop))).setHours(0, 0, 0));
-            var lastDayOfLastWeek = GetDate(new Date((new Date).setDate(lastDayOfTheWeek - (8 + loop))).setHours(23, 59, 59));
-            GetDateFilteredPost('Last Week', firstDayOfLastWeek, lastDayOfLastWeek, POSTS);
 
-            //Days This Month
-            var y = currentdate.getFullYear(),
-                m = currentdate.getMonth();
-            var firstDay = new Date(y, m, 1).setHours(0, 0, 0);
-            var untilLastWeek = firstDayOfLastWeek;
 
-            GetDateFilteredPost('This Month', GetDate(firstDay), untilLastWeek, POSTS);
+            //Days Last Week
+            var firstDayOfLastWeek = new Date((new Date).setDate(lastDayOfTheWeek.getDate() - 13)).setHours(0, 0, 0);
+            var lastDayOfLastWeek = new Date((new Date).setDate(lastDayOfTheWeek.getDate() - 7)).setHours(23, 59, 59);
+            GetDateFilteredPost('Last Week', GetDate(firstDayOfLastWeek), GetDate(lastDayOfLastWeek), POSTS);
 
             //Days Rest of Year
             var d = new Date(currentdate.getFullYear(), 0, 1).setHours(0, 0, 0);
-            GetDateFilteredPost('This Year', GetDate(d), GetDate(firstDay), POSTS);
+            GetDateFilteredPost('This Year', GetDate(d), GetDate(firstDayOfLastWeek), POSTS);
 
 
             //Remaining By Year			
@@ -283,7 +277,6 @@ function ShowGroupLinks(grp) {
             return item.name == grp;
         });
         if (grp_links[0] != null) {
-            console.log(grp_links);
             $Links = $("<ul></ul")
             $.each(grp_links[0].locations, function (keys, vals) {
 
@@ -402,9 +395,6 @@ function GetRansomGroupsData(sURL) {
     });
 
 }
-
-
-
 
 
 function GetData() {
