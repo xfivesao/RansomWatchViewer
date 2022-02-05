@@ -6,6 +6,11 @@ var LINKS;
 var POSTS;
 
 var Sources = {
+    LEVEL-4: {
+        POSTS: 'https://raw.githubusercontent.com/xfivesao/ransomwatch/main/posts.json',
+        GROUPS: 'https://raw.githubusercontent.com/xfivesao/ransomwatch/main/groups.json',
+        NAME: 'LEVEL-4'
+    },
     thetanz: {
         POSTS: 'https://raw.githubusercontent.com/thetanz/ransomwatch/main/posts.json',
         GROUPS: 'https://raw.githubusercontent.com/thetanz/ransomwatch/main/groups.json',
@@ -20,8 +25,8 @@ var Sources = {
 
 function SetSource(src) {
     if (src == null) {
-        RANSOMWATCH_GROUPS = Sources['JMousqueton'].GROUPS;
-        RANSOMWATCH_POSTS = Sources['JMousqueton'].POSTS;
+        RANSOMWATCH_GROUPS = Sources['LEVEL-4'].GROUPS;
+        RANSOMWATCH_POSTS = Sources['LEVEL-4'].POSTS;
     } else {
         RANSOMWATCH_GROUPS = Sources[src].GROUPS;
         RANSOMWATCH_POSTS = Sources[src].POSTS;
