@@ -133,52 +133,74 @@ function ProcessPostsData() {
         } else {
 
 
-            const currentdate = (new Date())
-            var DayOfTheWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+            /*            const currentdate = (new Date())
+                        var DayOfTheWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 
-            var firstDayOfTheWeek = new Date((new Date).setDate((currentdate.getDate() - currentdate.getDay()) + 1));
-            var lastDayOfTheWeek = new Date((new Date).setDate((currentdate.getDate() + 5)));
+                        var firstDayOfTheWeek = new Date((new Date).setDate((currentdate.getDate() - currentdate.getDay()) + 1));
+                        var lastDayOfTheWeek = new Date((new Date).setDate((currentdate.getDate() + 5)));
 
-            var day = currentdate.getDay()
-            var loop = 6
-            if (day != 0) {
-                loop = day - 1;
-            }
+                        var day = currentdate.getDay()
+                        var loop = 6
+                        if (day != 0) {
+                            loop = day - 1;
+                        }
 
-            //Days This Week
-            for (var i = 0; i <= loop; i++) {
-                var start = GetDate(new Date((new Date).setDate(currentdate.getDate() - i)).setHours(0, 0, 0));
-                var end = GetDate(new Date((new Date).setDate(currentdate.getDate() - i)).setHours(23, 59, 59));
+                        //Days This Week
+                        for (var i = 0; i <= loop; i++) {
+                            var start = GetDate(new Date((new Date).setDate(currentdate.getDate() - i)).setHours(0, 0, 0));
+                            var end = GetDate(new Date((new Date).setDate(currentdate.getDate() - i)).setHours(23, 59, 59));
 
-                var newDay = new Date(start).getDay();
+                            var newDay = new Date(start).getDay();
 
-                if (newDay == currentdate.getDay()) {
-                    GetDateFilteredPost('Today', start, end, POSTS);
-                } else {
-                    GetDateFilteredPost(DayOfTheWeek[newDay], start, end, POSTS);
+                            if (newDay == currentdate.getDay()) {
+                                GetDateFilteredPost('Today', start, end, POSTS);
+                            } else {
+                                GetDateFilteredPost(DayOfTheWeek[newDay], start, end, POSTS);
+                            }
+                        }
+
+
+                        //Days Last Week
+                        var firstDayOfLastWeek = new Date((new Date).setDate(lastDayOfTheWeek.getDate() - 13)).setHours(0, 0, 0);
+                        var lastDayOfLastWeek = new Date((new Date).setDate(lastDayOfTheWeek.getDate() - 7)).setHours(23, 59, 59);
+                        GetDateFilteredPost('Last Week', GetDate(firstDayOfLastWeek), GetDate(lastDayOfLastWeek), POSTS);
+
+                        //Days Rest of Year
+                        var d = new Date(currentdate.getFullYear(), 0, 1).setHours(0, 0, 0);
+                        GetDateFilteredPost('This Year', GetDate(d), GetDate(firstDayOfLastWeek), POSTS);
+
+
+                        //Remaining By Year			
+                        for (var i = currentdate.getFullYear() - 1; i >= 2020; i--) {
+
+                            GetDateFilteredPost(i, (new Date(i, 0, 1, 0, 0, 0)), (new Date(i, 11, 31, 23, 59, 59)), POSTS);
+
+
+                        }*/
+
+            var date = new Date();
+            var currentMonth = date.getMonth();
+            var currentYear = date.getFullYear();
+        
+     		var month = ["January","February","March","April","May","June","July",
+             "August","September","October","November","December"];
+			
+
+            for (var i = 0; i < 120; i++) {
+                if (currentMonth == -1) {
+                    currentMonth = 11;
+                    date.setFullYear(parseInt(currentYear) - 1);
+                    currentYear = date.getFullYear();
+					if(currentYear < 2019){break;}
+					
+					
                 }
+				GetDateFilteredPost(currentYear+ " " + month[currentMonth], (new Date(currentYear, currentMonth, 1, 0, 0, 0)), (new Date(currentYear, currentMonth, 31, 23, 59, 59)), POSTS);
+
+                currentMonth--;
+				
             }
-
-
-            //Days Last Week
-            var firstDayOfLastWeek = new Date((new Date).setDate(lastDayOfTheWeek.getDate() - 13)).setHours(0, 0, 0);
-            var lastDayOfLastWeek = new Date((new Date).setDate(lastDayOfTheWeek.getDate() - 7)).setHours(23, 59, 59);
-            GetDateFilteredPost('Last Week', GetDate(firstDayOfLastWeek), GetDate(lastDayOfLastWeek), POSTS);
-
-            //Days Rest of Year
-            var d = new Date(currentdate.getFullYear(), 0, 1).setHours(0, 0, 0);
-            GetDateFilteredPost('This Year', GetDate(d), GetDate(firstDayOfLastWeek), POSTS);
-
-
-            //Remaining By Year			
-            for (var i = currentdate.getFullYear() - 1; i >= 2020; i--) {
-
-                GetDateFilteredPost(i, (new Date(i, 0, 1, 0, 0, 0)), (new Date(i, 11, 31, 23, 59, 59)), POSTS);
-
-
-            }
-
-        }
+		}
 
         $('#JumpLinks').empty();
         $("#sideList").children().clone().appendTo("#JumpLinks");
